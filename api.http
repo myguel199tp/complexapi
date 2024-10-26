@@ -1,0 +1,279 @@
+### Upload sales uplaod 
+
+Content-Type: application/json
+
+{
+  "register": "657509efb0c5853ab661195e",
+  "ofert": "1",
+  "neighborhood": "1",
+  "property": "1",
+  "stratum": "1",
+  "price": "1",
+  "room": "1",
+  "restroom": "1",
+  "age": "1",
+  "administration": "1",
+  "area": "1",
+  "description": "1",
+  "file": [
+    {
+      "fieldname": "carro",
+      "originalname": "carro.jpg",
+      "encoding": "base64",
+      "mimetype": "image/jpeg"
+    }
+  ]
+}
+
+
+
+{
+  "next": "",
+  "previous": null,
+  "result": [
+    {
+      "continent": "America",
+      "country": [
+          {
+          "id": 4,
+          "indicative": "+ 57",
+          "currency": "COP",
+          "name": "Colombia",
+          "city": [
+            {
+              "id": 1,
+              "name": "Bogotá",
+            },
+            {
+              "id": 2,
+              "name": "Medellín",
+            },
+            {
+              "id": 3,
+              "name": "Cartagena de Indias",
+            },
+            {
+              "id": 4,
+              "name": "Barranquilla",
+            },
+            {
+              "id": 5,
+              "name": "Cali",
+            },
+            {
+              "id": 6,
+              "name": "Bucaramanga",
+            },
+            {
+              "id": 7,
+              "name": "Santa Marta",
+            },
+            {
+              "id": 8,
+              "name": "Manizales",
+            },
+            {
+              "id": 9,
+              "name": "Villavicencio",
+            },
+            {
+              "id": 10,
+              "name": "Ibagué",
+            },
+            {
+              "id": 11,
+              "name": "Pereira",
+            },
+            {
+              "id": 12,
+              "name": "Cúcuta",
+            },
+            {
+              "id": 13,
+              "name": "Valledupar",
+            },
+            {
+              "id": 14,
+              "name": "Quibdó",
+            },
+            {
+              "id": 15,
+              "name": "Popayán",
+            },
+            {
+              "id": 16,
+              "name": "Pasto",
+            },
+            {
+              "id": 17,
+              "name": "Armenia",
+            },
+            {
+              "id": 18,
+              "name": "Riohacha",
+            },
+            {
+              "id": 19,
+              "name": "Montería",
+            },
+            {
+              "id": 20,
+              "name": "Neiva",
+            },
+            {
+              "id": 21,
+              "name": "Tunja",
+            },
+            {
+              "id": 22,
+              "name": "Sincelejo",
+            },
+            {
+              "id": 23,
+              "name": "San Gil",
+            },
+            {
+              "id": 24,
+              "name": "Florencia",
+            },
+            {
+              "id": 25,
+              "name": "Yopal",
+            },
+            {
+              "id": 26,
+              "name": "Soacha",
+            },
+            {
+              "id": 27,
+              "name": "Bello",
+            },
+            {
+              "id": 28,
+              "name": "Buenaventura",
+            },
+            {
+              "id": 29,
+              "name": "Mocoa",
+            },
+            {
+              "id": 30,
+              "name": "San José Del Guaviare",
+            },
+            {
+              "id": 31,
+              "name": "Inírida",
+            },
+            {
+              "id": 32,
+              "name": "Leticia",
+            },
+            {
+              "id": 33,
+              "name": "Palmira",
+            },
+            {
+              "id": 34,
+              "name": "Arauca",
+            },
+            {
+              "id": 35,
+              "name": "Mitú",
+            },
+            {
+              "id": 36,
+              "name": "Puerto Carreño",
+            },
+            {
+              "id": 37,
+              "name": "Barrancabermeja",
+            },
+            {
+              "id": 38,
+              "name": "Apartadó",
+            },
+            {
+              "id": 39,
+              "name": "Maicao",
+            },
+            {
+              "id": 40,
+              "name": "Tumaco",
+            },
+            {
+              "id": 41,
+              "name": "Turbo",
+            },
+            {
+              "id": 42,
+              "name": "Tuluá",
+            },
+            {
+              "id": 43,
+              "name": "Ipiales",
+            },
+            {
+              "id": 44,
+              "name": "Soledad",
+            },
+            {
+              "id": 45,
+              "name": "Puerto Berrío",
+            },
+            {
+              "id": 46,
+              "name": "Girardot",
+            },
+            {
+              "id": 47,
+              "name": "Magangué",
+            },
+            {
+              "id": 48,
+              "name": "Ocaña",
+            },
+            {
+              "id": 49,
+              "name": "Ciénaga",
+            },
+            {
+              "id": 50,
+              "name": "Santa Cruz de Lorica",
+            }
+          ]
+        },
+      ]
+    }
+  ]
+}
+
+
+
+[
+  {
+    "files": [
+        {
+            "originalname": "yate.png",
+            "filename": "yate.png",
+            "mimetype": "image/png",
+            "size": 269628,
+            "_id": "65da95c79a5ef3e5e4444bed",
+            "__v": 0
+        },
+        {
+            "originalname": "carroo.jpg",
+            "filename": "carroo.jpg",
+            "mimetype": "image/jpeg",
+            "size": 128482,
+            "_id": "65da95c79a5ef3e5e4444bef",
+            "__v": 0
+        }
+    ],
+    "names": "lucas",
+    "contact": "conta luca",
+    "maill": "lucas@example.com",
+    "phoneNum": "333254666333",
+    "typeService": "2"
+}
+]
+

@@ -1,0 +1,21 @@
+version: '3'
+
+services:
+  mongo:
+    image: mongo
+    container_name: my-mongo
+    ports:
+      - "3001:3002"
+    volumes:
+      - ./data:/data/db
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ""
+      MONGO_INITDB_ROOT_PASSWORD: ""
+
+  mongoclient:
+    image: mongoclient/mongoclient
+    container_name: my-mongoclient
+    depends_on:
+      - mongo
+    environment:
+      - DISPLAY=host.docker.internal:0
