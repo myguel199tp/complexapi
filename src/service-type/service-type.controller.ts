@@ -10,7 +10,8 @@ import {
 import { ServiceTypeService } from './service-type.service';
 import { CreateServiceTypeDto } from './dto/create-service-type.dto';
 import { UpdateServiceTypeDto } from './dto/update-service-type.dto';
-
+import { ApiTags } from '@nestjs/swagger';
+@ApiTags('service-type')
 @Controller('service-type')
 export class ServiceTypeController {
   constructor(private readonly serviceTypeService: ServiceTypeService) {}

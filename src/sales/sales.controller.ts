@@ -19,7 +19,8 @@ import { FilesInterceptor } from '@nestjs/platform-express/multer/interceptors/f
 import { CreateVenteDto } from './dto/create-vente.dto';
 import { CreateSaleDto } from './dto/create-sale.dto';
 import { diskStorage } from 'multer';
-
+import { ApiTags } from '@nestjs/swagger';
+@ApiTags('sales')
 @Controller('sales')
 export class SalesController {
   constructor(private readonly salesService: SalesService) {}
@@ -89,7 +90,7 @@ export class SalesController {
         area: body.area,
         description: body.description,
         created_at: body.created_at,
-        finished_at: body.finished_at
+        finished_at: body.finished_at,
       };
 
       const response = await this.salesService.uploadFiles(createSaleDto);
@@ -122,7 +123,7 @@ export class SalesController {
           area: response.area,
           description: response.description,
           created_at: response.created_at,
-          finished_at: response.finished_at
+          finished_at: response.finished_at,
         },
       ];
 
@@ -167,7 +168,6 @@ export class SalesController {
   findOne(@Query('iduser') iduser?: string) {
     return this.salesService.findAllByAllMethods(iduser);
   }
-
 
   @Get('byProperty/:property')
   findAllByProperty(@Param('property') property: string) {

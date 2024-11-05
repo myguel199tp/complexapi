@@ -11,7 +11,8 @@ import {
 import { InfoClientService } from './info-client.service';
 import { CreateInfoClientDto } from './dto/create-info-client.dto';
 import { UpdateInfoClientDto } from './dto/update-info-client.dto';
-
+import { ApiTags } from '@nestjs/swagger';
+@ApiTags('info-client')
 @Controller('info-client')
 export class InfoClientController {
   constructor(private readonly infoClientService: InfoClientService) {}

@@ -18,25 +18,42 @@ async function bootstrap() {
     .setTitle('Api documentation')
     .setDescription('The API description jyj conjuntos')
     .setVersion('1.0')
+    .addTag('advertisements')
+    .addTag('antiquity')
+    .addTag('auth')
+    .addTag('city')
+    .addTag('commerces')
+    .addTag('contact')
     .addTag('sales')
+    .addTag('file')
+    .addTag('info-client')
+    .addTag('interested')
     .addTag('leases')
+    .addTag('mailer')
     .addTag('ofert')
+    .addTag('parking')
     .addTag('property-type')
+    .addTag('register-complex')
     .addTag('rent')
     .addTag('restroom')
     .addTag('room')
+    .addTag('sales')
     .addTag('service-type')
     .addTag('speciallity')
     .addTag('stratum')
-    .addTag('antiquity')
-    .addTag('auth')
     .addTag('users')
     .build();
 
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('documentacion', app, document);
 
-  app.useGlobalPipes(new ValidationPipe());
+  app.useGlobalPipes(
+    new ValidationPipe({
+      transform: true,
+      whitelist: true,
+      forbidNonWhitelisted: true,
+    }),
+  );
   await app.listen(process.env.PORT);
 }
 bootstrap();

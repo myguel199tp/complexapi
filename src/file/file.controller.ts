@@ -9,18 +9,22 @@ import {
   Body,
   Get,
   Query,
+  HttpCode,
 } from '@nestjs/common';
 import { FileService } from './file.service';
 import { FilesInterceptor } from '@nestjs/platform-express';
 import { CreateFileDto } from './dto/create-file.dto';
 import { CreateCommerceDto } from './dto/create-commerce.dto';
 import { diskStorage } from 'multer';
-
-@Controller('filesd')
+import { ApiTags, ApiOperation } from '@nestjs/swagger';
+@ApiTags('file')
+@Controller('file')
 export class FileController {
   constructor(private readonly fileService: FileService) {}
 
   @Post('uploads')
+  @ApiOperation({ summary: 'Crear un nuevo dato' })
+  @HttpCode(HttpStatus.CREATED)
   @UseInterceptors(
     FilesInterceptor('files', 10, {
       storage: diskStorage({
@@ -55,7 +59,29 @@ export class FileController {
   async uploadFiles(
     @UploadedFiles() files: Express.Multer.File[],
     @Body() body: CreateCommerceDto,
-  ) {
+  ): Promise<
+    {
+      files: {
+        originalname: string;
+        filename: string;
+        mimetype: string;
+        size: number;
+        _id: string;
+        __v: number;
+      }[];
+      names: string;
+      iduser: string;
+      contact: string;
+      maill: string;
+      phoneNum: string;
+      typeService: string;
+      descripton: string;
+      country: string;
+      city: string;
+      created_at: Date;
+      finished_at: Date;
+    }[]
+  > {
     try {
       if (!files || files.length === 0) {
         throw new HttpException(
@@ -75,8 +101,8 @@ export class FileController {
         descripton: body.descripton,
         country: body.country,
         city: body.city,
-        created_at: body.created_at,
-        finished_at: body.finished_at
+        // created_at: body.created_at,
+        // finished_at: body.finished_at,
       };
 
       const response = await this.fileService.uploadFiles(createFileDto);
@@ -101,7 +127,7 @@ export class FileController {
           country: response.country,
           city: response.city,
           created_at: response.created_at,
-          finished_at: response.finished_at
+          finished_at: response.finished_at,
         },
       ];
 
@@ -123,7 +149,6 @@ export class FileController {
   ) {
     return this.fileService.findAllByAllMethods(names, contact, typeService);
   }
-
 
   @Get('byuser')
   findOne(@Query('iduser') iduser?: string) {

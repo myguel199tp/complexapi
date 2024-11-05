@@ -1,8 +1,17 @@
 /* eslint-disable prettier/prettier */
-import { Controller, Post, Body, Param, Get, BadRequestException } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Body,
+  Param,
+  Get,
+  BadRequestException,
+  HttpCode,
+  HttpStatus,
+} from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { RegisterAuthDto } from './dto/register-auth.dto';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { LoginAuthDto } from './dto/login-auth.dto';
 import { CreateSaleDto } from 'src/sales/dto/create-sale.dto';
 import { CreateFileDto } from 'src/file/dto/create-file.dto';
@@ -23,13 +32,27 @@ export class AuthController {
   }
 
   @Post('register')
+  @ApiOperation({ summary: 'Crear un nuevo usuario' })
+  @HttpCode(HttpStatus.CREATED)
   async register(@Body() registerAuthDto: RegisterAuthDto) {
     if (registerAuthDto.termsConditions !== true) {
-      throw new BadRequestException('You must accept terms and conditions.');
+      throw new BadRequestException(
+        'campo terminos y condiciones es obligatorio.',
+      );
+    }
+    if (registerAuthDto.password.length < 5) {
+      throw new BadRequestException(
+        'contraseña debe tener más de 5 caracteres',
+      );
+    }
+    const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]+$/;
+    if (!passwordRegex.test(registerAuthDto.password)) {
+      throw new BadRequestException(
+        'La contraseña debe contener tanto letras como números.',
+      );
     }
     return this.authService.register(registerAuthDto);
   }
-
 
   @Post(':_id/sales')
   addSaleToUser(

@@ -25,13 +25,12 @@ export class FileService {
     phoneNum: string;
     typeService: string;
     descripton: string;
-    country: string
-    city: string
-    created_at: Date,
-    finished_at: Date
+    country: string;
+    city: string;
+    created_at: Date;
+    finished_at: Date;
   }> {
     try {
-
       const filesData = createFileDto.files.map((file) => ({
         originalname: file.originalname,
         filename: file.originalname,
@@ -51,10 +50,9 @@ export class FileService {
         descripton: createFileDto.descripton,
         country: createFileDto.country,
         city: createFileDto.city,
-        created_at: createFileDto.created_at,
-        finished_at: createFileDto.finished_at
+        // created_at: createFileDto.created_at,
+        // finished_at: createFileDto.finished_at
       });
-
 
       const savedFile = await fileInstance.save();
 
@@ -77,9 +75,8 @@ export class FileService {
         country: savedFile.country,
         city: savedFile.city,
         created_at: savedFile.created_at,
-        finished_at: savedFile.finished_at
+        finished_at: savedFile.finished_at,
       };
-
 
       return result;
     } catch (error) {
@@ -117,11 +114,10 @@ export class FileService {
     const query: any = {};
 
     if (iduser !== undefined) {
-      query.iduser = iduser;  
+      query.iduser = iduser;
     }
 
     const list = await this.fileModel.find(query).exec();
     return list;
   }
-
 }

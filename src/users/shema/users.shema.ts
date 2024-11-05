@@ -20,7 +20,7 @@ export class User {
   password: string;
 
   @Prop()
-  termsConditions: string;
+  termsConditions: boolean;
 
   // @Prop({ type: [{ type: Object }] })
   // sales: object[];

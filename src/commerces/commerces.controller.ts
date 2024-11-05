@@ -2,7 +2,8 @@
 import { Controller, Get, Post, Body } from '@nestjs/common';
 import { CommercesService } from './commerces.service';
 import { CreateCommerceDto } from './dto/create-commerce.dto';
-
+import { ApiTags } from '@nestjs/swagger';
+@ApiTags('commerces')
 @Controller('commerces')
 export class CommercesController {
   constructor(private readonly commercesService: CommercesService) {}

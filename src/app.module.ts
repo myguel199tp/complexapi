@@ -1,10 +1,10 @@
-/* eslint-disable prettier/prettier */
 import { config } from 'dotenv';
 config();
 
-import { Module } from '@nestjs/common';
+import { Module, NestModule, MiddlewareConsumer } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { MulterModule } from '@nestjs/platform-express';
+import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { LeasesModule } from './leases/leases.module';
@@ -30,7 +30,6 @@ import { CityModule } from './city/city.module';
 import { FileModule } from './file/file.module';
 import { join } from 'path';
 import { CommercesModule } from './commerces/commerces.module';
-import { UserAuthModule } from './user-auth/user-auth.module';
 import { RegisterComplexModule } from './register-complex/register-complex.module';
 
 @Module({
@@ -61,10 +60,23 @@ import { RegisterComplexModule } from './register-complex/register-complex.modul
     CityModule,
     FileModule,
     CommercesModule,
-    UserAuthModule,
     RegisterComplexModule,
   ],
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule {}
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {}
+
+  static setupSwagger(app) {
+    const config = new DocumentBuilder()
+      .setTitle('API Documentation')
+      .setDescription('Documentación de API para la aplicación')
+      .setVersion('1.0')
+      .addTag('file')
+      .build();
+
+    const document = SwaggerModule.createDocument(app, config);
+    SwaggerModule.setup('api', app, document);
+  }
+}
