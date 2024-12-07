@@ -135,7 +135,7 @@ export class FileController {
     } catch (error) {
       console.error(error);
       throw new HttpException(
-        'Error al subir los archivos: ' + error.message,
+        'Error al subir los archivos: ' + error,
         HttpStatus.INTERNAL_SERVER_ERROR,
       );
     }

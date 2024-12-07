@@ -2,8 +2,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
 
-export type RegisterComplexDocument = 
-RegisterComplex & Document;
+export type RegisterComplexDocument = RegisterComplex & Document;
 
 @Schema()
 export class RegisterComplex {
@@ -27,11 +26,13 @@ export class RegisterComplex {
   country: string;
   @Prop({ required: true })
   termsConditions: string;
+  nameUnit: string;
+  // file: Express.Multer.File;
 
   acquire: string;
   created_at: Date;
   finished_at: Date;
-
 }
 
-export const RegisterComplexSchema = SchemaFactory.createForClass(RegisterComplex);
+export const RegisterComplexSchema =
+  SchemaFactory.createForClass(RegisterComplex);

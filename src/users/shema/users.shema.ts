@@ -20,13 +20,13 @@ export class User {
   password: string;
 
   @Prop()
-  termsConditions: boolean;
+  termsConditions: string;
 
-  // @Prop({ type: [{ type: Object }] })
-  // sales: object[];
+  @Prop()
+  nameUnit: string;
 
-  // @Prop({ type: [{ type: Object }] })
-  // commerce: object[];
+  @Prop() // Campo opcional para la imagen
+  file?: string;
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

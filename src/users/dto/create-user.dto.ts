@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsEmail, IsNotEmpty, IsString } from 'class-validator';
+import { IsEmail, IsNotEmpty, IsOptional, IsString } from 'class-validator';
 
 export class CreateUserDto {
   @ApiProperty({ description: 'El identificador único del nobre' })
@@ -26,13 +26,15 @@ export class CreateUserDto {
   @ApiProperty({ description: 'El identificador único de contraseña' })
   @IsNotEmpty()
   password: string;
-
   @IsNotEmpty()
   termsConditions: string;
-
-  // @ValidateNested({ each: true })
-  // sales: CreateSaleDto[];
-
-  // @ValidateNested({ each: true })
-  // commerce: CreateFileDto[];
+  @IsNotEmpty()
+  nameUnit: string;
+  @ApiProperty({
+    description: 'Ruta de la imagen del usuario',
+    required: false,
+  })
+  @IsOptional()
+  @IsString()
+  file?: string;
 }

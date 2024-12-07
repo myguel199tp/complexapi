@@ -31,6 +31,7 @@ import { FileModule } from './file/file.module';
 import { join } from 'path';
 import { CommercesModule } from './commerces/commerces.module';
 import { RegisterComplexModule } from './register-complex/register-complex.module';
+import { ChatModule } from './chat/chat.module';
 
 @Module({
   imports: [
@@ -61,6 +62,7 @@ import { RegisterComplexModule } from './register-complex/register-complex.modul
     FileModule,
     CommercesModule,
     RegisterComplexModule,
+    ChatModule,
   ],
   controllers: [AppController],
   providers: [AppService],
@@ -68,7 +70,7 @@ import { RegisterComplexModule } from './register-complex/register-complex.modul
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {}
 
-  static setupSwagger(app) {
+  static setupSwagger(app: any) {
     const config = new DocumentBuilder()
       .setTitle('API Documentation')
       .setDescription('Documentación de API para la aplicación')

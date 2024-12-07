@@ -81,8 +81,7 @@ export class FileService {
       return result;
     } catch (error) {
       throw new Error(
-        'Error al guardar los archivos en la base de datos. Detalles: ' +
-          error.message,
+        'Error al guardar los archivos en la base de datos. Detalles: ' + error,
       );
     }
   }

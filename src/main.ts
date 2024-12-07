@@ -42,6 +42,7 @@ async function bootstrap() {
     .addTag('speciallity')
     .addTag('stratum')
     .addTag('users')
+    .addTag('chat')
     .build();
 
   const document = SwaggerModule.createDocument(app, config);
@@ -54,6 +55,8 @@ async function bootstrap() {
       forbidNonWhitelisted: true,
     }),
   );
+  app.setGlobalPrefix('api');
+
   await app.listen(process.env.PORT);
 }
 bootstrap();

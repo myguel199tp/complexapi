@@ -1,8 +1,9 @@
 /* eslint-disable prettier/prettier */
 import { ApiProperty, PartialType } from '@nestjs/swagger';
 import { LoginAuthDto } from './login-auth.dto';
-import { IsBoolean, IsNotEmpty, IsString } from 'class-validator';
+import { IsNotEmpty, IsOptional, IsString } from 'class-validator';
 import { Prop } from '@nestjs/mongoose';
+import { Express } from 'express';
 
 export class RegisterAuthDto extends PartialType(LoginAuthDto) {
   @ApiProperty({ description: 'El nombre' })
@@ -37,6 +38,15 @@ export class RegisterAuthDto extends PartialType(LoginAuthDto) {
 
   @ApiProperty({ description: 'los terminos y condiciones' })
   @IsNotEmpty({ message: 'El campo terminso y condiciones es obligatorio.' })
-  @IsBoolean()
-  termsConditions: boolean;
+  @IsString()
+  termsConditions: string;
+
+  @ApiProperty({ description: 'name unit' })
+  @IsString()
+  nameUnit: string;
+
+  @ApiProperty({ description: 'Archivo del usuario', required: false })
+  @IsOptional()
+  @IsString()
+  file?: string;
 }

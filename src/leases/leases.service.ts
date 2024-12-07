@@ -20,7 +20,7 @@ export class LeasesService {
 
       return createdLease;
     } catch (error) {
-      console.error('Error al crear la venta:', error.message);
+      console.error('Error al crear la venta:', error);
       throw error;
     }
   }

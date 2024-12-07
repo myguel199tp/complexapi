@@ -23,6 +23,10 @@ export class CreateRegisterComplexDto {
   @IsNotEmpty()
   termsConditions: string;
   @IsNotEmpty()
+  nameUnit: string;
+  // @IsNotEmpty()
+  // file: Express.Multer.File;
+  @IsNotEmpty()
   acquire: string;
   created_at: Date;
   finished_at: Date;

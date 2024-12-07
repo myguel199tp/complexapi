@@ -6,9 +6,13 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { User, UserSchema } from './shema/users.shema';
 import { Sales, SalesSchema } from 'src/sales/shema/sales.shema';
 import { FileSchema } from 'src/file/shema/file.shema';
+import { MulterModule } from '@nestjs/platform-express';
 
 @Module({
   imports: [
+    MulterModule.register({
+      dest: './uploads',
+    }),
     MongooseModule.forFeature([
       {
         name: User.name,

@@ -31,31 +31,49 @@ export class AuthService {
     return findone;
   }
 
-  async register(userObject: RegisterAuthDto) {
-    const { password } = userObject;
-    const plainToHash = await hash(password, 10);
-    const userWithHashedPassword = { ...userObject, password: plainToHash };
+  async register(registerAuthDto: RegisterAuthDto): Promise<User> {
+    const { password } = registerAuthDto;
 
-    const newUser = await this.userModel.create(userWithHashedPassword);
+    // Hashear la contraseña
+    const hashedPassword = await hash(password, 10);
 
-    return newUser;
+    // Crear el usuario con la contraseña hasheada
+    const newUser = new this.userModel({
+      ...registerAuthDto,
+      password: hashedPassword,
+    });
+
+    return newUser.save();
   }
 
   async login(userObjectLogin: LoginAuthDto) {
     const { email, password } = userObjectLogin;
+
     const findUser = await this.userModel.findOne({ email });
-    if (!findUser) throw new NotFoundException('Usuario no encontrado');
+    if (!findUser) {
+      throw new NotFoundException('Usuario no encontrado');
+    }
 
-    const isPasswordValid = await this.comparePasswords(password, findUser.password);
+    const isPasswordValid = await this.comparePasswords(
+      password,
+      findUser.password,
+    );
+    if (!isPasswordValid) {
+      throw new HttpException('Contraseña incorrecta', 403);
+    }
 
-    if (!isPasswordValid) throw new HttpException('Contraseña incorrecta', 403);
+    const accessToken = await this.generateJwtToken(findUser);
 
-    const token = await this.generateJwtToken(findUser);
+    const user = findUser.toObject();
+    delete user.password;
 
-    return { token, user: findUser };
+    return { accessToken, user };
   }
 
-  private async comparePasswords(plainPassword: string, hashedPassword: string): Promise<boolean> {
+  private async comparePasswords(
+    plainPassword: string,
+    hashedPassword: string,
+  ): Promise<boolean> {
     return compare(plainPassword, hashedPassword);
   }
 
