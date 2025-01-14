@@ -5,7 +5,7 @@ import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
 import { RegisterAuthDto } from './dto/register-auth.dto';
 import { hash, compare } from 'bcrypt';
-import { LoginAuthDto } from './dto/login-auth.dto';
+import { LoginAuthConjuntoDto, LoginAuthDto } from './dto/login-auth.dto';
 import { JwtService } from '@nestjs/jwt';
 import { CreateSaleDto } from 'src/sales/dto/create-sale.dto';
 import { SalesService } from 'src/sales/sales.service';
@@ -34,10 +34,8 @@ export class AuthService {
   async register(registerAuthDto: RegisterAuthDto): Promise<User> {
     const { password } = registerAuthDto;
 
-    // Hashear la contraseña
     const hashedPassword = await hash(password, 10);
 
-    // Crear el usuario con la contraseña hasheada
     const newUser = new this.userModel({
       ...registerAuthDto,
       password: hashedPassword,
@@ -70,6 +68,40 @@ export class AuthService {
     return { accessToken, user };
   }
 
+  async loginConjunto(userObjectLogin: LoginAuthConjuntoDto) {
+    const { email, password, nameUnit } = userObjectLogin;
+
+    const findUser = await this.userModel.findOne({ email, nameUnit });
+    if (!findUser) {
+      throw new NotFoundException('Usuario o unidad no encontrados');
+    }
+
+    const isPasswordValid = await this.comparePasswords(
+      password,
+      findUser.password,
+    );
+    if (!isPasswordValid) {
+      throw new HttpException('Contraseña incorrecta', 403);
+    }
+
+    const accessToken = await this.generateJwtToken(findUser);
+
+    const user = findUser.toObject();
+    delete user.password;
+
+    return { accessToken, user };
+  }
+
+  async findUserByEmail(email: string): Promise<UserDocument | null> {
+    return this.userModel.findOne({ email }).exec();
+  }
+
+  async updateUser(user: UserDocument): Promise<UserDocument> {
+    return this.userModel
+      .findByIdAndUpdate(user._id, user, { new: true })
+      .exec();
+  }
+
   private async comparePasswords(
     plainPassword: string,
     hashedPassword: string,
@@ -91,7 +123,6 @@ export class AuthService {
 
     await this.salesService.uploadFiles(createSaleDto);
 
-    // user.sales.push(createSaleDto);
     await user.save();
 
     return user;
@@ -106,7 +137,6 @@ export class AuthService {
 
     await this.fileService.uploadFiles(createFileDto);
 
-    // user.commerce.push(createFileDto);
     await user.save();
 
     return user;

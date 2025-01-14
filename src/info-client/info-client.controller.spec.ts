@@ -1,5 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { InfoClientController } from './info-client.controller';
+import { InfoClientController } from './InfoClientController';
 import { InfoClientService } from './info-client.service';
 
 describe('InfoClientController', () => {

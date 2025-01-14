@@ -30,8 +30,9 @@ import { CityModule } from './city/city.module';
 import { FileModule } from './file/file.module';
 import { join } from 'path';
 import { CommercesModule } from './commerces/commerces.module';
-import { RegisterComplexModule } from './register-complex/register-complex.module';
 import { ChatModule } from './chat/chat.module';
+import { NewAdminModule } from './new-admin/new-admin.module';
+import { ActivitiesModule } from './activities/activities.module';
 
 @Module({
   imports: [
@@ -61,8 +62,9 @@ import { ChatModule } from './chat/chat.module';
     CityModule,
     FileModule,
     CommercesModule,
-    RegisterComplexModule,
     ChatModule,
+    NewAdminModule,
+    ActivitiesModule,
   ],
   controllers: [AppController],
   providers: [AppService],

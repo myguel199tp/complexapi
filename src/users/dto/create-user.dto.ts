@@ -1,5 +1,13 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsEmail, IsNotEmpty, IsOptional, IsString } from 'class-validator';
+import { Type } from 'class-transformer';
+import {
+  ArrayNotEmpty,
+  IsArray,
+  IsEmail,
+  IsNotEmpty,
+  IsOptional,
+  IsString,
+} from 'class-validator';
 
 export class CreateUserDto {
   @ApiProperty({ description: 'El identificador único del nobre' })
@@ -27,14 +35,43 @@ export class CreateUserDto {
   @IsNotEmpty()
   password: string;
   @IsNotEmpty()
-  termsConditions: string;
-  @IsNotEmpty()
-  nameUnit: string;
-  @ApiProperty({
-    description: 'Ruta de la imagen del usuario',
-    required: false,
-  })
+  termsConditions: boolean;
+  @IsOptional()
+  @IsString()
   @IsOptional()
   @IsString()
   file?: string;
+
+  @ApiProperty({ description: 'name unit' })
+  @IsOptional()
+  @IsString()
+  nameUnit?: string;
+
+  @ApiProperty({ description: 'name unit' })
+  @IsOptional()
+  @IsString()
+  address?: string;
+
+  @IsOptional()
+  @IsString()
+  neigborhood?: string;
+
+  @IsOptional()
+  @IsString()
+  country?: string;
+
+  @IsString()
+  rol: string;
+
+  @IsOptional()
+  @IsString()
+  apartment?: string;
+
+  @IsOptional()
+  @IsString()
+  plaque?: string;
+
+  @IsOptional()
+  @IsString()
+  numberid?: string;
 }
