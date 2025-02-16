@@ -63,6 +63,9 @@ export class CreateUserDto {
   @IsString()
   rol: string;
 
+  @IsString()
+  quantityapt?: number;
+
   @IsOptional()
   @IsString()
   apartment?: string;

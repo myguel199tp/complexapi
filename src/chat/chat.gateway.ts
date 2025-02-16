@@ -1,86 +1,93 @@
 import {
-  MessageBody,
-  SubscribeMessage,
   WebSocketGateway,
   WebSocketServer,
+  SubscribeMessage,
+  MessageBody,
   ConnectedSocket,
+  OnGatewayConnection,
+  OnGatewayDisconnect,
 } from '@nestjs/websockets';
-import { ChatService } from './chat.service';
-import { OnModuleInit } from '@nestjs/common';
 import { Server, Socket } from 'socket.io';
+import { ChatService } from './chat.service';
 
 @WebSocketGateway({
   cors: {
     origin: '*',
   },
 })
-export class ChatGateway implements OnModuleInit {
+export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
   @WebSocketServer()
-  public server: Server;
+  server: Server;
 
   constructor(private readonly chatService: ChatService) {}
 
-  onModuleInit() {
-    this.server.on('connection', (socket: Socket) => {
-      const { name, accessToken } = socket.handshake.auth;
-      console.log({ name, accessToken });
-
-      if (!name) {
-        socket.disconnect();
-        return;
-      }
-
-      this.chatService.onClientConnected({ id: socket.id, name: name });
-      this.server.emit('on-clients-changed', this.chatService.getClients());
-
-      socket.on('disconnect', () => {
-        this.chatService.onClientDisconnected(socket.id);
-        this.server.emit('on-clients-changed', this.chatService.getClients());
-      });
-    });
+  handleConnection(client: Socket) {
+    console.log(`🟢 Cliente conectado: ${client.id}`);
   }
 
-  @SubscribeMessage('send-message')
+  handleDisconnect(client: Socket) {
+    console.log(`🔴 Cliente desconectado: ${client.id}`);
+  }
+
+  // 🔹 Usuarios se unen a una sala compartida
+  @SubscribeMessage('joinRoom')
+  handleJoinRoom(
+    @MessageBody()
+    { userId, recipientId }: { userId: string; recipientId: string },
+    @ConnectedSocket() client: Socket,
+  ) {
+    const roomId = [userId, recipientId].sort().join('_'); // 🔹 Nombre único para la sala
+
+    client.join(roomId);
+    console.log(`📡 Usuario ${userId} se unió a la sala ${roomId}`);
+
+    const clients = this.server.sockets.adapter.rooms.get(roomId);
+    console.log(
+      `👥 Usuarios en la sala ${roomId}:`,
+      clients ? [...clients] : 'No hay usuarios',
+    );
+  }
+
+  // 🔹 Enviar mensaje a una sala compartida
+  @SubscribeMessage('sendMessage')
   async handleMessage(
-    @MessageBody() payload: { message: string },
+    @MessageBody()
+    {
+      userId,
+      message,
+      recipientId,
+    }: { userId: string; message: string; recipientId: string },
     @ConnectedSocket() client: Socket,
   ) {
-    const { name } = client.handshake.auth;
-    const { message } = payload;
+    const roomId = [userId, recipientId].sort().join('_');
 
-    console.log('Mensaje recibido en el servidor:', { name, message });
+    console.log(
+      `📩 Nuevo mensaje en sala ${roomId}: "${message}" de ${userId} para ${recipientId}`,
+    );
 
-    if (!message) {
-      return;
-    }
-
-    await this.chatService.saveMessage(client.id, name, message);
-
-    this.server.emit('on-message', {
-      userId: client.id,
-      message: message,
-      name: name,
+    // Guardar mensaje en la BD
+    const savedMessage = await this.chatService.saveMessage({
+      userId,
+      message,
+      recipientId,
+      status: 'delivered',
     });
-  }
 
-  @SubscribeMessage('send-private-message')
-  async handlePrivateMessage(
-    @MessageBody() { message, to }: { message: string; to: string },
-    @ConnectedSocket() client: Socket,
-  ) {
-    const { name } = client.handshake.auth;
-    console.log({ name, message, to });
+    // 🔹 Verifica si hay usuarios en la sala antes de emitir
+    const clients = this.server.sockets.adapter.rooms.get(roomId);
+    console.log(
+      `👥 Usuarios en la sala ${roomId}:`,
+      clients ? [...clients] : 'No hay usuarios',
+    );
 
-    if (!message || !to) {
-      return;
+    // Emitir mensaje solo si hay alguien en la sala
+    if (clients && clients.size > 0) {
+      this.server.to(roomId).emit('receiveMessage', savedMessage);
+      console.log(`📤 Mensaje enviado a la sala ${roomId}`);
+    } else {
+      console.log(
+        `⚠️ Nadie en la sala ${roomId}, no se pudo enviar el mensaje.`,
+      );
     }
-
-    await this.chatService.saveMessage(client.id, name, message, to);
-
-    client.to(to).emit('on-private-message', {
-      userId: client.id,
-      message: message,
-      name: name,
-    });
   }
 }

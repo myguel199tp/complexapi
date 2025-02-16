@@ -1,12 +1,12 @@
 /* eslint-disable prettier/prettier */
 import { NestFactory } from '@nestjs/core';
-import { AppModule } from './app.module';
 import * as dotenv from 'dotenv';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { ValidationPipe } from '@nestjs/common';
 import * as express from 'express';
 import * as bodyParser from 'body-parser';
 import { join } from 'path';
+import { AppModule } from './app.module';
 
 async function bootstrap() {
   dotenv.config();
@@ -46,7 +46,8 @@ async function bootstrap() {
     .addTag('speciallity')
     .addTag('stratum')
     .addTag('users')
-    .addTag('chat')
+    .addTag('chart')
+    .addTag('citofonies')
     .build();
 
   const document = SwaggerModule.createDocument(app, config);
@@ -61,6 +62,6 @@ async function bootstrap() {
   );
   app.setGlobalPrefix('api');
 
-  await app.listen(process.env.PORT);
+  await app.listen(process.env.PORT || 3000);
 }
 bootstrap();

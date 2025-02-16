@@ -50,8 +50,6 @@ export class FileService {
         descripton: createFileDto.descripton,
         country: createFileDto.country,
         city: createFileDto.city,
-        // created_at: createFileDto.created_at,
-        // finished_at: createFileDto.finished_at
       });
 
       const savedFile = await fileInstance.save();

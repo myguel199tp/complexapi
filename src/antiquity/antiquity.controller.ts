@@ -35,7 +35,7 @@ export class AntiquityController {
   }
 
   @Get()
-  @ApiOperation({ summary: 'Obtener parkings por filtros' })
+  @ApiOperation({ summary: 'Obtener antiguedad por filtros' })
   @ApiQuery({
     name: 'name',
     type: String,

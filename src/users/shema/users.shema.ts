@@ -41,6 +41,9 @@ export class User {
   rol: string;
 
   @Prop()
+  quantityapt?: number;
+
+  @Prop()
   apartment?: string;
 
   @Prop()

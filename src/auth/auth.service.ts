@@ -21,8 +21,11 @@ export class AuthService {
     private fileService: FileService,
   ) {}
 
-  async findAll() {
-    const list = await this.userModel.find({});
+  async findAll(nameUnit?: string) {
+    const filter = nameUnit
+      ? { nameUnit: { $regex: new RegExp(nameUnit, 'i') } }
+      : {};
+    const list = await this.userModel.find(filter);
     return list;
   }
 
@@ -45,51 +48,80 @@ export class AuthService {
   }
 
   async login(userObjectLogin: LoginAuthDto) {
+    console.log('Iniciando login con:', userObjectLogin);
+
     const { email, password } = userObjectLogin;
+    console.log('Email recibido:', email);
 
     const findUser = await this.userModel.findOne({ email });
     if (!findUser) {
+      console.log('Usuario no encontrado');
       throw new NotFoundException('Usuario no encontrado');
     }
+
+    console.log('Usuario encontrado:', findUser);
 
     const isPasswordValid = await this.comparePasswords(
       password,
       findUser.password,
     );
+
     if (!isPasswordValid) {
+      console.log('Contraseña incorrecta para el usuario:', email);
       throw new HttpException('Contraseña incorrecta', 403);
     }
 
+    console.log('Contraseña válida, generando token...');
+
     const accessToken = await this.generateJwtToken(findUser);
+    console.log('Token generado:', accessToken);
 
     const user = findUser.toObject();
     delete user.password;
+
+    console.log('Login exitoso:', user);
 
     return { accessToken, user };
   }
 
   async loginConjunto(userObjectLogin: LoginAuthConjuntoDto) {
+    console.log('Iniciando loginConjunto con:', userObjectLogin);
+
     const { email, password, nameUnit } = userObjectLogin;
+    console.log(`Datos extraídos - Email: ${email}, Unidad: ${nameUnit}`);
 
-    const findUser = await this.userModel.findOne({ email, nameUnit });
-    if (!findUser) {
-      throw new NotFoundException('Usuario o unidad no encontrados');
+    try {
+      const findUser = await this.userModel.findOne({ email, nameUnit });
+      console.log('Usuario encontrado:', findUser);
+
+      if (!findUser) {
+        console.error('Usuario o unidad no encontrados');
+        throw new NotFoundException('Usuario o unidad no encontrados');
+      }
+
+      const isPasswordValid = await this.comparePasswords(
+        password,
+        findUser.password,
+      );
+      console.log('¿Contraseña válida?:', isPasswordValid);
+
+      if (!isPasswordValid) {
+        console.error('Contraseña incorrecta');
+        throw new HttpException('Contraseña incorrecta', 403);
+      }
+
+      const accessToken = await this.generateJwtToken(findUser);
+      console.log('Token de acceso generado:', accessToken);
+
+      const user = findUser.toObject();
+      delete user.password;
+      console.log('Usuario final (sin contraseña):', user);
+
+      return { accessToken, user };
+    } catch (error) {
+      console.error('Error en loginConjunto:', error);
+      throw error;
     }
-
-    const isPasswordValid = await this.comparePasswords(
-      password,
-      findUser.password,
-    );
-    if (!isPasswordValid) {
-      throw new HttpException('Contraseña incorrecta', 403);
-    }
-
-    const accessToken = await this.generateJwtToken(findUser);
-
-    const user = findUser.toObject();
-    delete user.password;
-
-    return { accessToken, user };
   }
 
   async findUserByEmail(email: string): Promise<UserDocument | null> {

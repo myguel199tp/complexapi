@@ -1,9 +1,16 @@
 import { Injectable } from '@nestjs/common';
 import { CreateActivityDto } from './dto/create-activity.dto';
 import { UpdateActivityDto } from './dto/update-activity.dto';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
+import { Activity, ActivityDocument } from './shema/activity.shema';
 
 @Injectable()
 export class ActivitiesService {
+  constructor(
+    @InjectModel(Activity.name)
+    private activityModule: Model<ActivityDocument>,
+  ) {}
   create(createActivityDto: CreateActivityDto) {
     return 'This action adds a new activity';
   }

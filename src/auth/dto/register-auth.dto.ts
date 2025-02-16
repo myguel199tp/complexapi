@@ -68,6 +68,9 @@ export class RegisterAuthDto extends PartialType(LoginAuthDto) {
   rol: string;
 
   @IsOptional()
+  quantityapt?: number;
+
+  @IsOptional()
   @IsString()
   apartment?: string;
 
