@@ -31,21 +31,29 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
   // 🔹 Usuarios se unen a una sala compartida
   @SubscribeMessage('joinRoom')
-  handleJoinRoom(
+  async handleJoinRoom(
     @MessageBody()
     { userId, recipientId }: { userId: string; recipientId: string },
     @ConnectedSocket() client: Socket,
   ) {
-    const roomId = [userId, recipientId].sort().join('_'); // 🔹 Nombre único para la sala
+    const roomId = [userId, recipientId].sort().join('_'); // Nombre único para la sala
 
     client.join(roomId);
     console.log(`📡 Usuario ${userId} se unió a la sala ${roomId}`);
 
-    const clients = this.server.sockets.adapter.rooms.get(roomId);
-    console.log(
-      `👥 Usuarios en la sala ${roomId}:`,
-      clients ? [...clients] : 'No hay usuarios',
-    );
+    // Recuperar mensajes pendientes para el usuario que se conecta
+    const pendingMessages = await this.chatService.getPendingMessages(userId);
+
+    // Emitir los mensajes pendientes
+    if (pendingMessages.length > 0) {
+      console.log(`📩 Enviando mensajes pendientes a ${userId}`);
+      pendingMessages.forEach((message) => {
+        this.server.to(roomId).emit('receiveMessage', message);
+      });
+
+      // Marcar mensajes como entregados
+      await this.chatService.markMessagesAsSent(userId);
+    }
   }
 
   // 🔹 Enviar mensaje a una sala compartida
@@ -65,12 +73,12 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
       `📩 Nuevo mensaje en sala ${roomId}: "${message}" de ${userId} para ${recipientId}`,
     );
 
-    // Guardar mensaje en la BD
+    // Guardar mensaje como pendiente en la base de datos
     const savedMessage = await this.chatService.saveMessage({
       userId,
       message,
       recipientId,
-      status: 'delivered',
+      status: 'pending', // Mensaje marcado como pendiente
     });
 
     // 🔹 Verifica si hay usuarios en la sala antes de emitir
@@ -86,7 +94,7 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
       console.log(`📤 Mensaje enviado a la sala ${roomId}`);
     } else {
       console.log(
-        `⚠️ Nadie en la sala ${roomId}, no se pudo enviar el mensaje.`,
+        `⚠️ Nadie en la sala ${roomId}, el mensaje se guarda como pendiente.`,
       );
     }
   }
