@@ -35,6 +35,7 @@ import { ActivitiesModule } from './activities/activities.module';
 import { ForumThreadsModule } from './forum-threads/forum-threads.module';
 import { HollidayModule } from './holliday/holliday.module';
 import { ChatModule } from './chat/chat.module';
+import { VisitModule } from './visit/visit.module';
 
 @Module({
   imports: [
@@ -69,6 +70,7 @@ import { ChatModule } from './chat/chat.module';
     ActivitiesModule,
     ForumThreadsModule,
     HollidayModule,
+    VisitModule,
   ],
   controllers: [AppController],
   providers: [AppService],

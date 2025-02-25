@@ -2,15 +2,17 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { CreateNewAdminDto } from './dto/create-new-admin.dto';
 import { UpdateNewAdminDto } from './dto/update-new-admin.dto';
 import { InjectModel } from '@nestjs/mongoose';
-import { InfoNewAdmin } from './shema/info-new-admin.shema';
+import {
+  InfoNewAdmin,
+  InfoNewAdminDocument,
+} from './shema/info-new-admin.shema';
 import { Model } from 'mongoose';
-import { LeasesDocument } from 'src/leases/shema/leases.shema';
 
 @Injectable()
 export class NewAdminService {
   constructor(
     @InjectModel(InfoNewAdmin.name)
-    private infoNewModule: Model<LeasesDocument>,
+    private infoNewModule: Model<InfoNewAdminDocument>,
   ) {}
 
   async registerNew(createNewAdminDto: CreateNewAdminDto): Promise<any> {
@@ -22,7 +24,7 @@ export class NewAdminService {
       return await newUser.save();
     } catch (error) {
       throw new HttpException(
-        `Error al registrar el administrador: ${error}`,
+        `Error al registrar la noticia: ${error}`,
         HttpStatus.INTERNAL_SERVER_ERROR,
       );
     }

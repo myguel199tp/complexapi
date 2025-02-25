@@ -74,6 +74,8 @@ export class HollidayController {
       country: string;
       address: string;
       name: string;
+      price: string;
+      description: string;
     }[]
   > {
     try {
@@ -93,6 +95,8 @@ export class HollidayController {
         country: body.country,
         address: body.address,
         name: body.name,
+        price: body.price,
+        description: body.description,
       };
 
       const response = await this.hollidayService.uploadFiles(
@@ -116,6 +120,8 @@ export class HollidayController {
           country: response.country,
           address: response.address,
           name: response.name,
+          price: response.price,
+          description: response.description,
         },
       ];
 

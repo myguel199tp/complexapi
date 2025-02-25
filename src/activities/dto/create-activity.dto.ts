@@ -1,19 +1,22 @@
-import { IsNotEmpty, IsString } from 'class-validator';
+import { IsNotEmpty, IsOptional, IsString } from 'class-validator';
 
 export class CreateActivityDto {
   @IsString()
   @IsNotEmpty({ message: 'El campo actividad es nombre.' })
   nameunit: string;
   @IsString()
+  @IsNotEmpty({ message: 'El campo actividad es nombre.' })
+  city: string;
+  @IsString()
   @IsNotEmpty({ message: 'El campo actividad es obligatorio.' })
   activity: string;
   @IsString()
-  @IsNotEmpty({ message: 'El descripción id es obligatorio.' })
-  apto: string;
+  @IsNotEmpty({ message: 'El horario id es obligatorio.' })
+  dateHourStart: string;
   @IsString()
   @IsNotEmpty({ message: 'El horario id es obligatorio.' })
-  dateHours: string;
+  dateHourEnd: string;
+  @IsOptional()
   @IsString()
-  @IsNotEmpty({ message: 'El descripción id es obligatorio.' })
-  name: string;
+  file?: string;
 }

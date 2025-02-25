@@ -28,4 +28,12 @@ export class CreateHollidayDto {
   @IsNotEmpty()
   @IsString()
   name: string;
+
+  @IsNotEmpty()
+  @IsString()
+  price: string;
+
+  @IsNotEmpty()
+  @IsString()
+  description: string;
 }

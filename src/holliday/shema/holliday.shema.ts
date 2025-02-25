@@ -37,6 +37,12 @@ export class Holliday {
 
   @Prop({ required: true })
   name: string;
+
+  @Prop({ required: true })
+  price: string;
+
+  @Prop({ required: true })
+  description: string;
 }
 
 export const HollidaySchema = SchemaFactory.createForClass(Holliday);

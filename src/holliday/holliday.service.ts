@@ -27,6 +27,8 @@ export class HollidayService {
     country: string;
     address: string;
     name: string;
+    price: string;
+    description: string;
   }> {
     try {
       const filesData = createFileHollidayDto.files.map((file) => ({
@@ -45,6 +47,8 @@ export class HollidayService {
         country: createFileHollidayDto.country,
         address: createFileHollidayDto.address,
         name: createFileHollidayDto.name,
+        price: createFileHollidayDto.price,
+        description: createFileHollidayDto.description,
       });
 
       const savedFile = await fileInstance.save();
@@ -65,6 +69,8 @@ export class HollidayService {
         country: savedFile.country,
         address: savedFile.address,
         name: savedFile.name,
+        price: savedFile.price,
+        description: savedFile.description,
       };
 
       return result;
