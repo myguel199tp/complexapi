@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { CreateActivityDto } from './dto/create-activity.dto';
 import { UpdateActivityDto } from './dto/update-activity.dto';
 import { InjectModel } from '@nestjs/mongoose';
@@ -11,6 +11,20 @@ export class ActivitiesService {
     @InjectModel(Activity.name)
     private activityModule: Model<ActivityDocument>,
   ) {}
+  async registerNew(createActivityDto: CreateActivityDto): Promise<any> {
+    try {
+      const visitUser = new this.activityModule({
+        ...createActivityDto,
+      });
+
+      return await visitUser.save();
+    } catch (error) {
+      throw new HttpException(
+        `Error al registrar el visitante: ${error}`,
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+  }
   create(createActivityDto: CreateActivityDto) {
     return 'This action adds a new activity';
   }

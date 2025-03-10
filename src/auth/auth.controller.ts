@@ -5,7 +5,6 @@ import {
   Body,
   Param,
   Get,
-  BadRequestException,
   HttpCode,
   HttpStatus,
   HttpException,

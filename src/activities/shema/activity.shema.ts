@@ -7,17 +7,19 @@ export type ActivityDocument = Activity & Document;
 @Schema()
 export class Activity {
   @Prop()
-  nameunit: string;
+  status: boolean;
   @Prop()
-  city: string;
+  nameUnit: string;
   @Prop()
   activity: string;
+  @Prop()
+  description: string;
   @Prop()
   dateHourStart: string;
   @Prop()
   dateHourEnd: string;
   @Prop()
-  file: string;
+  file?: string;
 }
 
 export const ActivitySchema = SchemaFactory.createForClass(Activity);

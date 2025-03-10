@@ -11,14 +11,21 @@ import {
   HttpStatus,
   HttpCode,
   UploadedFile,
+  UseGuards,
 } from '@nestjs/common';
 import { VisitService } from './visit.service';
 import { CreateVisitDto } from './dto/create-visit.dto';
 import { UpdateVisitDto } from './dto/update-visit.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
+import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
+import { RolesGuard } from 'src/auth/roles.guard';
+import { Roles } from 'src/auth/roles.decorator';
 
+@ApiTags('visit')
 @Controller('visit')
+@UseGuards(JwtAuthGuard)
 export class VisitController {
   constructor(private readonly visitService: VisitService) {}
 
@@ -28,6 +35,10 @@ export class VisitController {
   }
 
   @Post('register-visit')
+  @ApiOperation({ summary: 'Registrar nuevo visitante' })
+  @HttpCode(HttpStatus.CREATED)
+  @UseGuards(RolesGuard)
+  @Roles('porteria')
   @UseInterceptors(
     FileInterceptor('file', {
       storage: diskStorage({

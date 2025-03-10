@@ -141,8 +141,12 @@ export class AuthService {
     return compare(plainPassword, hashedPassword);
   }
 
+  // private async generateJwtToken(user: UserDocument): Promise<string> {
+  //   const payload = { id: user._id, name: user.name };
+  //   return this.jwtService.sign(payload);
+  // }
   private async generateJwtToken(user: UserDocument): Promise<string> {
-    const payload = { id: user._id, name: user.name };
+    const payload = { id: user._id, name: user.name, rol: user.rol };
     return this.jwtService.sign(payload);
   }
 

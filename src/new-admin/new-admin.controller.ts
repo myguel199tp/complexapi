@@ -11,23 +11,29 @@ import {
   HttpStatus,
   HttpCode,
   UploadedFile,
+  UseGuards,
 } from '@nestjs/common';
 import { NewAdminService } from './new-admin.service';
 import { CreateNewAdminDto } from './dto/create-new-admin.dto';
 import { UpdateNewAdminDto } from './dto/update-new-admin.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
+import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
+import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import { RolesGuard } from 'src/auth/roles.guard';
+import { Roles } from 'src/auth/roles.decorator';
 
+@ApiTags('new-admin')
 @Controller('new-admin')
+@UseGuards(JwtAuthGuard)
 export class NewAdminController {
   constructor(private readonly newAdminService: NewAdminService) {}
 
-  @Post()
-  create(@Body() createNewAdminDto: CreateNewAdminDto) {
-    return this.newAdminService.create(createNewAdminDto);
-  }
-
   @Post('register-admin')
+  @ApiOperation({ summary: 'Crear un nueva noticia' })
+  @HttpCode(HttpStatus.CREATED)
+  @UseGuards(RolesGuard)
+  @Roles('admins', 'porteria')
   @UseInterceptors(
     FileInterceptor('file', {
       storage: diskStorage({
