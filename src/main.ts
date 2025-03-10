@@ -1,16 +1,20 @@
 /* eslint-disable prettier/prettier */
 import { NestFactory } from '@nestjs/core';
-import { AppModule } from './app.module';
 import * as dotenv from 'dotenv';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { ValidationPipe } from '@nestjs/common';
 import * as express from 'express';
+import * as bodyParser from 'body-parser';
 import { join } from 'path';
+import { AppModule } from './app.module';
 
 async function bootstrap() {
   dotenv.config();
   const app = await NestFactory.create(AppModule);
   app.use('/uploads', express.static(join(__dirname, '..', 'uploads')));
+
+  app.use(bodyParser.json({ limit: '50mb' }));
+  app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
 
   app.enableCors();
 
@@ -42,6 +46,8 @@ async function bootstrap() {
     .addTag('speciallity')
     .addTag('stratum')
     .addTag('users')
+    .addTag('chart')
+    .addTag('citofonies')
     .build();
 
   const document = SwaggerModule.createDocument(app, config);
@@ -54,6 +60,8 @@ async function bootstrap() {
       forbidNonWhitelisted: true,
     }),
   );
-  await app.listen(process.env.PORT);
+  app.setGlobalPrefix('api');
+
+  await app.listen(process.env.PORT || 3000);
 }
 bootstrap();

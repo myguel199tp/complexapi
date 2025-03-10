@@ -5,7 +5,7 @@ import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
 import { RegisterAuthDto } from './dto/register-auth.dto';
 import { hash, compare } from 'bcrypt';
-import { LoginAuthDto } from './dto/login-auth.dto';
+import { LoginAuthConjuntoDto, LoginAuthDto } from './dto/login-auth.dto';
 import { JwtService } from '@nestjs/jwt';
 import { CreateSaleDto } from 'src/sales/dto/create-sale.dto';
 import { SalesService } from 'src/sales/sales.service';
@@ -21,8 +21,11 @@ export class AuthService {
     private fileService: FileService,
   ) {}
 
-  async findAll() {
-    const list = await this.userModel.find({});
+  async findAll(nameUnit?: string) {
+    const filter = nameUnit
+      ? { nameUnit: { $regex: new RegExp(nameUnit, 'i') } }
+      : {};
+    const list = await this.userModel.find(filter);
     return list;
   }
 
@@ -31,36 +34,119 @@ export class AuthService {
     return findone;
   }
 
-  async register(userObject: RegisterAuthDto) {
-    const { password } = userObject;
-    const plainToHash = await hash(password, 10);
-    const userWithHashedPassword = { ...userObject, password: plainToHash };
+  async register(registerAuthDto: RegisterAuthDto): Promise<User> {
+    const { password } = registerAuthDto;
 
-    const newUser = await this.userModel.create(userWithHashedPassword);
+    const hashedPassword = await hash(password, 10);
 
-    return newUser;
+    const newUser = new this.userModel({
+      ...registerAuthDto,
+      password: hashedPassword,
+    });
+
+    return newUser.save();
   }
 
   async login(userObjectLogin: LoginAuthDto) {
+    console.log('Iniciando login con:', userObjectLogin);
+
     const { email, password } = userObjectLogin;
+    console.log('Email recibido:', email);
+
     const findUser = await this.userModel.findOne({ email });
-    if (!findUser) throw new NotFoundException('Usuario no encontrado');
+    if (!findUser) {
+      console.log('Usuario no encontrado');
+      throw new NotFoundException('Usuario no encontrado');
+    }
 
-    const isPasswordValid = await this.comparePasswords(password, findUser.password);
+    console.log('Usuario encontrado:', findUser);
 
-    if (!isPasswordValid) throw new HttpException('Contraseña incorrecta', 403);
+    const isPasswordValid = await this.comparePasswords(
+      password,
+      findUser.password,
+    );
 
-    const token = await this.generateJwtToken(findUser);
+    if (!isPasswordValid) {
+      console.log('Contraseña incorrecta para el usuario:', email);
+      throw new HttpException('Contraseña incorrecta', 403);
+    }
 
-    return { token, user: findUser };
+    console.log('Contraseña válida, generando token...');
+
+    const accessToken = await this.generateJwtToken(findUser);
+    console.log('Token generado:', accessToken);
+
+    const user = findUser.toObject();
+    delete user.password;
+
+    console.log('Login exitoso:', user);
+
+    return { accessToken, user };
   }
 
-  private async comparePasswords(plainPassword: string, hashedPassword: string): Promise<boolean> {
+  async loginConjunto(userObjectLogin: LoginAuthConjuntoDto) {
+    console.log('Iniciando loginConjunto con:', userObjectLogin);
+
+    const { email, password, nameUnit } = userObjectLogin;
+    console.log(`Datos extraídos - Email: ${email}, Unidad: ${nameUnit}`);
+
+    try {
+      const findUser = await this.userModel.findOne({ email, nameUnit });
+      console.log('Usuario encontrado:', findUser);
+
+      if (!findUser) {
+        console.error('Usuario o unidad no encontrados');
+        throw new NotFoundException('Usuario o unidad no encontrados');
+      }
+
+      const isPasswordValid = await this.comparePasswords(
+        password,
+        findUser.password,
+      );
+      console.log('¿Contraseña válida?:', isPasswordValid);
+
+      if (!isPasswordValid) {
+        console.error('Contraseña incorrecta');
+        throw new HttpException('Contraseña incorrecta', 403);
+      }
+
+      const accessToken = await this.generateJwtToken(findUser);
+      console.log('Token de acceso generado:', accessToken);
+
+      const user = findUser.toObject();
+      delete user.password;
+      console.log('Usuario final (sin contraseña):', user);
+
+      return { accessToken, user };
+    } catch (error) {
+      console.error('Error en loginConjunto:', error);
+      throw error;
+    }
+  }
+
+  async findUserByEmail(email: string): Promise<UserDocument | null> {
+    return this.userModel.findOne({ email }).exec();
+  }
+
+  async updateUser(user: UserDocument): Promise<UserDocument> {
+    return this.userModel
+      .findByIdAndUpdate(user._id, user, { new: true })
+      .exec();
+  }
+
+  private async comparePasswords(
+    plainPassword: string,
+    hashedPassword: string,
+  ): Promise<boolean> {
     return compare(plainPassword, hashedPassword);
   }
 
+  // private async generateJwtToken(user: UserDocument): Promise<string> {
+  //   const payload = { id: user._id, name: user.name };
+  //   return this.jwtService.sign(payload);
+  // }
   private async generateJwtToken(user: UserDocument): Promise<string> {
-    const payload = { id: user._id, name: user.name };
+    const payload = { id: user._id, name: user.name, rol: user.rol };
     return this.jwtService.sign(payload);
   }
 
@@ -73,7 +159,6 @@ export class AuthService {
 
     await this.salesService.uploadFiles(createSaleDto);
 
-    // user.sales.push(createSaleDto);
     await user.save();
 
     return user;
@@ -88,7 +173,6 @@ export class AuthService {
 
     await this.fileService.uploadFiles(createFileDto);
 
-    // user.commerce.push(createFileDto);
     await user.save();
 
     return user;

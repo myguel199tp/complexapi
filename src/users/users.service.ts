@@ -12,7 +12,11 @@ export class UsersService {
     @InjectModel(User.name) private userModule: Model<UserDocument>,
   ) {}
 
-  async create(createUserDto: CreateUserDto) {
+  // async create(createUserDto: CreateUserDto) {
+  //   const createdUser = new this.userModule(createUserDto);
+  //   return createdUser.save();
+  // }
+  async create(createUserDto: CreateUserDto): Promise<User> {
     const createdUser = new this.userModule(createUserDto);
     return createdUser.save();
   }

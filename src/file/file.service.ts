@@ -50,8 +50,6 @@ export class FileService {
         descripton: createFileDto.descripton,
         country: createFileDto.country,
         city: createFileDto.city,
-        // created_at: createFileDto.created_at,
-        // finished_at: createFileDto.finished_at
       });
 
       const savedFile = await fileInstance.save();
@@ -81,8 +79,7 @@ export class FileService {
       return result;
     } catch (error) {
       throw new Error(
-        'Error al guardar los archivos en la base de datos. Detalles: ' +
-          error.message,
+        'Error al guardar los archivos en la base de datos. Detalles: ' + error,
       );
     }
   }

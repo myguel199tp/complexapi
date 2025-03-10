@@ -5,7 +5,7 @@ export class CreateVenteDto {
   @IsNotEmpty()
   @IsString()
   iduser: string;
-  
+
   @IsString()
   ofert: string;
 
@@ -60,6 +60,6 @@ export class CreateVenteDto {
   @IsString()
   description: string;
 
-  created_at: Date
-  finished_at: Date
+  created_at: Date;
+  finished_at: Date;
 }

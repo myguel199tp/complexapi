@@ -17,9 +17,10 @@ import { SalesService } from './sales.service';
 import { UpdateSaleDto } from './dto/update-sale.dto';
 import { FilesInterceptor } from '@nestjs/platform-express/multer/interceptors/files.interceptor';
 import { CreateVenteDto } from './dto/create-vente.dto';
-import { CreateSaleDto } from './dto/create-sale.dto';
+// import { CreateSaleDto } from './dto/create-sale.dto';
 import { diskStorage } from 'multer';
 import { ApiTags } from '@nestjs/swagger';
+import { CreateSaleDto } from './dto/create-sale.dto';
 @ApiTags('sales')
 @Controller('sales')
 export class SalesController {

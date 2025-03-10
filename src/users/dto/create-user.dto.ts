@@ -1,5 +1,13 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsEmail, IsNotEmpty, IsString } from 'class-validator';
+import { Type } from 'class-transformer';
+import {
+  ArrayNotEmpty,
+  IsArray,
+  IsEmail,
+  IsNotEmpty,
+  IsOptional,
+  IsString,
+} from 'class-validator';
 
 export class CreateUserDto {
   @ApiProperty({ description: 'El identificador único del nobre' })
@@ -26,13 +34,47 @@ export class CreateUserDto {
   @ApiProperty({ description: 'El identificador único de contraseña' })
   @IsNotEmpty()
   password: string;
-
   @IsNotEmpty()
-  termsConditions: string;
+  termsConditions: boolean;
+  @IsOptional()
+  @IsString()
+  @IsOptional()
+  @IsString()
+  file?: string;
 
-  // @ValidateNested({ each: true })
-  // sales: CreateSaleDto[];
+  @ApiProperty({ description: 'name unit' })
+  @IsOptional()
+  @IsString()
+  nameUnit?: string;
 
-  // @ValidateNested({ each: true })
-  // commerce: CreateFileDto[];
+  @ApiProperty({ description: 'name unit' })
+  @IsOptional()
+  @IsString()
+  address?: string;
+
+  @IsOptional()
+  @IsString()
+  neigborhood?: string;
+
+  @IsOptional()
+  @IsString()
+  country?: string;
+
+  @IsString()
+  rol: string;
+
+  @IsString()
+  quantityapt?: number;
+
+  @IsOptional()
+  @IsString()
+  apartment?: string;
+
+  @IsOptional()
+  @IsString()
+  plaque?: string;
+
+  @IsOptional()
+  @IsString()
+  numberid?: string;
 }

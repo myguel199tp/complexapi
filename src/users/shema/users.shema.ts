@@ -22,11 +22,35 @@ export class User {
   @Prop()
   termsConditions: boolean;
 
-  // @Prop({ type: [{ type: Object }] })
-  // sales: object[];
+  @Prop()
+  file?: string;
 
-  // @Prop({ type: [{ type: Object }] })
-  // commerce: object[];
+  @Prop()
+  nameUnit?: string;
+
+  @Prop()
+  address?: string;
+
+  @Prop()
+  neigborhood?: string;
+
+  @Prop()
+  country?: string;
+
+  @Prop()
+  rol: string;
+
+  @Prop()
+  quantityapt?: number;
+
+  @Prop()
+  apartment?: string;
+
+  @Prop()
+  plaque?: string;
+
+  @Prop()
+  numberid?: string;
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

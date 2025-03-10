@@ -1,7 +1,7 @@
 /* eslint-disable prettier/prettier */
 import { ApiProperty, PartialType } from '@nestjs/swagger';
 import { LoginAuthDto } from './login-auth.dto';
-import { IsBoolean, IsNotEmpty, IsString } from 'class-validator';
+import { IsNotEmpty, IsOptional, IsString } from 'class-validator';
 import { Prop } from '@nestjs/mongoose';
 
 export class RegisterAuthDto extends PartialType(LoginAuthDto) {
@@ -37,6 +37,48 @@ export class RegisterAuthDto extends PartialType(LoginAuthDto) {
 
   @ApiProperty({ description: 'los terminos y condiciones' })
   @IsNotEmpty({ message: 'El campo terminso y condiciones es obligatorio.' })
-  @IsBoolean()
+  @IsString()
   termsConditions: boolean;
+
+  @ApiProperty({ description: 'name unit' })
+  @IsOptional()
+  @IsString()
+  nameUnit?: string;
+
+  @ApiProperty({ description: 'Archivo del usuario', required: false })
+  @IsOptional()
+  @IsString()
+  file?: string;
+
+  @ApiProperty({ description: 'name unit' })
+  @IsOptional()
+  @IsString()
+  address?: string;
+
+  @IsOptional()
+  @IsString()
+  neigborhood?: string;
+
+  @IsOptional()
+  @IsString()
+  country?: string;
+
+  @ApiProperty({ description: 'el rol' })
+  @IsNotEmpty({ message: 'El campo rol  es obligatorio.' })
+  rol: string;
+
+  @IsOptional()
+  quantityapt?: number;
+
+  @IsOptional()
+  @IsString()
+  apartment?: string;
+
+  @IsOptional()
+  @IsString()
+  plaque?: string;
+
+  @IsOptional()
+  @IsString()
+  numberid?: string;
 }

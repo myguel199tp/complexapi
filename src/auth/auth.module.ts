@@ -13,6 +13,9 @@ import { FileService } from 'src/file/file.service';
 
 @Module({
   imports: [
+    MulterModule.register({
+      dest: './uploads',
+    }),
     MongooseModule.forFeature([
       {
         name: User.name,

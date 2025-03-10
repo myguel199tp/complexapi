@@ -21,7 +21,7 @@ export class SalesService {
       _id: number;
       __v: number;
     }[];
-    iduser: string
+    iduser: string;
     ofert: string;
     email: string;
     phone: string;
@@ -38,8 +38,8 @@ export class SalesService {
     administration: string;
     area: string;
     description: string;
-    created_at: Date,
-    finished_at: Date
+    created_at: Date;
+    finished_at: Date;
   }> {
     try {
       const filesData = createSaleDto.files.map((file) => ({
@@ -70,7 +70,7 @@ export class SalesService {
         area: createSaleDto.area,
         description: createSaleDto.description,
         created_at: createSaleDto.created_at,
-        finished_at: createSaleDto.finished_at
+        finished_at: createSaleDto.finished_at,
       });
 
       const savedSale = await saleInstance.save();
@@ -102,13 +102,12 @@ export class SalesService {
         area: savedSale.area,
         description: savedSale.description,
         created_at: savedSale.created_at,
-        finished_at: savedSale.finished_at
+        finished_at: savedSale.finished_at,
       };
     } catch (error) {
       console.error(error);
       throw new Error(
-        'Error al guardar los archivos en la base de datos. Detalles: ' +
-          error.message,
+        'Error al guardar los archivos en la base de datos. Detalles: ' + error,
       );
     }
   }
@@ -183,7 +182,7 @@ export class SalesService {
     const query: any = {};
 
     if (iduser !== undefined) {
-      query.iduser = iduser;  
+      query.iduser = iduser;
     }
 
     const list = await this.salesModule.find(query).exec();
