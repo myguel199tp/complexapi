@@ -92,22 +92,8 @@ export class ActivitiesController {
     }
   }
 
-  @Get()
-  @ApiOperation({ summary: 'Obtener actividad por filtros' })
-  @ApiQuery({
-    name: 'name',
-    type: String,
-    required: false,
-    description: 'Nombre de antiguedad',
-  })
-  @ApiQuery({
-    name: 'location',
-    type: String,
-    required: false,
-    description: 'Ubicación de antiguedad',
-  })
-  @HttpCode(HttpStatus.OK)
-  findAll() {
+  @Get('allActivities')
+  findAllWithoutFilter() {
     return this.activitiesService.findAll();
   }
 }

@@ -19,7 +19,7 @@ export class Sales {
   files: misFiles[];
 
   @Prop({ required: true })
-  iduser: string; 
+  iduser: string;
 
   @Prop({ required: true })
   ofert: string;
@@ -35,6 +35,9 @@ export class Sales {
 
   @Prop({ required: true })
   neighborhood: string;
+
+  @Prop({ required: true })
+  address: string;
 
   @Prop({ required: true })
   country: string;
@@ -69,8 +72,8 @@ export class Sales {
   @Prop({ required: true })
   description: string;
 
-  created_at: Date
-  finished_at: Date
+  created_at: Date;
+  finished_at: Date;
 }
 
 export const SalesSchema = SchemaFactory.createForClass(Sales);

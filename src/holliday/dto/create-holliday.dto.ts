@@ -1,13 +1,13 @@
-import { IsNotEmpty, IsString, IsBoolean } from 'class-validator';
+import { IsNotEmpty, IsString, IsBoolean, IsOptional } from 'class-validator';
 
 export class CreateHollidayDto {
-  @IsNotEmpty()
+  @IsOptional()
   @IsString()
-  nameUnit: string;
+  nameUnit?: string;
 
-  @IsNotEmpty()
+  @IsOptional()
   @IsString()
-  apartment: string;
+  apartment?: string;
 
   @IsNotEmpty()
   @IsString()
@@ -31,7 +31,31 @@ export class CreateHollidayDto {
 
   @IsNotEmpty()
   @IsString()
+  cel: string;
+
+  @IsNotEmpty()
+  @IsString()
   price: string;
+
+  @IsNotEmpty()
+  @IsString()
+  status: boolean;
+
+  @IsNotEmpty()
+  @IsString()
+  maxGuests: number;
+
+  @IsNotEmpty()
+  @IsString()
+  parking: boolean;
+
+  @IsNotEmpty()
+  @IsString()
+  petsAllowed: boolean;
+
+  @IsNotEmpty()
+  @IsString()
+  ruleshome: string;
 
   @IsNotEmpty()
   @IsString()

@@ -97,8 +97,8 @@ export class NewAdminController {
     }
   }
 
-  @Get()
-  findAll() {
+  @Get('allNews')
+  findAllWithoutFilter() {
     return this.newAdminService.findAll();
   }
 

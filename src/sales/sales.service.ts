@@ -27,6 +27,7 @@ export class SalesService {
     phone: string;
     parking: string;
     neighborhood: string;
+    address: string;
     country: string;
     city: string;
     property: string;
@@ -58,6 +59,7 @@ export class SalesService {
         phone: createSaleDto.phone,
         parking: createSaleDto.parking,
         neighborhood: createSaleDto.neighborhood,
+        address: createSaleDto.address,
         country: createSaleDto.country,
         city: createSaleDto.city,
         property: createSaleDto.property,
@@ -90,6 +92,7 @@ export class SalesService {
         phone: savedSale.phone,
         parking: savedSale.parking,
         neighborhood: savedSale.neighborhood,
+        address: savedSale.address,
         country: savedSale.country,
         city: savedSale.city,
         property: savedSale.property,

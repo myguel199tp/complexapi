@@ -27,7 +27,13 @@ export class HollidayService {
     country: string;
     address: string;
     name: string;
+    cel: string;
     price: string;
+    status: boolean;
+    maxGuests: number;
+    parking: boolean;
+    petsAllowed: boolean;
+    ruleshome: string;
     description: string;
   }> {
     try {
@@ -47,7 +53,13 @@ export class HollidayService {
         country: createFileHollidayDto.country,
         address: createFileHollidayDto.address,
         name: createFileHollidayDto.name,
+        cel: createFileHollidayDto.cel,
         price: createFileHollidayDto.price,
+        status: createFileHollidayDto.status,
+        maxGuests: createFileHollidayDto.maxGuests,
+        parking: createFileHollidayDto.parking,
+        petsAllowed: createFileHollidayDto.petsAllowed,
+        ruleshome: createFileHollidayDto.ruleshome,
         description: createFileHollidayDto.description,
       });
 
@@ -69,7 +81,13 @@ export class HollidayService {
         country: savedFile.country,
         address: savedFile.address,
         name: savedFile.name,
+        cel: savedFile.cel,
         price: savedFile.price,
+        status: savedFile.status,
+        maxGuests: savedFile.maxGuests,
+        parking: savedFile.parking,
+        petsAllowed: savedFile.petsAllowed,
+        ruleshome: savedFile.ruleshome,
         description: savedFile.description,
       };
 

@@ -36,6 +36,7 @@ import { ForumThreadsModule } from './forum-threads/forum-threads.module';
 import { HollidayModule } from './holliday/holliday.module';
 import { ChatModule } from './chat/chat.module';
 import { VisitModule } from './visit/visit.module';
+import { BookingModule } from './booking/booking.module';
 
 @Module({
   imports: [
@@ -71,6 +72,7 @@ import { VisitModule } from './visit/visit.module';
     ForumThreadsModule,
     HollidayModule,
     VisitModule,
+    BookingModule,
   ],
   controllers: [AppController],
   providers: [AppService],

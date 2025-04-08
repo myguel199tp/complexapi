@@ -33,8 +33,12 @@ export class NewAdminService {
     return 'This action adds a new newAdmin';
   }
 
-  findAll() {
-    return `This action returns all newAdmin`;
+  async findAll(nameUnit?: string) {
+    const filter = nameUnit
+      ? { nameUnit: { $regex: new RegExp(nameUnit, 'i') } }
+      : {};
+    const list = await this.infoNewModule.find(filter);
+    return list;
   }
 
   findOne(id: number) {

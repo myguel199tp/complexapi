@@ -20,7 +20,7 @@ export class ActivitiesService {
       return await visitUser.save();
     } catch (error) {
       throw new HttpException(
-        `Error al registrar el visitante: ${error}`,
+        `Error al registrar el actividad: ${error}`,
         HttpStatus.INTERNAL_SERVER_ERROR,
       );
     }
@@ -29,10 +29,13 @@ export class ActivitiesService {
     return 'This action adds a new activity';
   }
 
-  findAll() {
-    return `This action returns all activities`;
+  async findAll(nameUnit?: string) {
+    const filter = nameUnit
+      ? { nameUnit: { $regex: new RegExp(nameUnit, 'i') } }
+      : {};
+    const list = await this.activityModule.find(filter);
+    return list;
   }
-
   findOne(id: number) {
     return `This action returns a #${id} activity`;
   }

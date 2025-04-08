@@ -17,10 +17,10 @@ export class Holliday {
   @Prop()
   files: misFiles[];
 
-  @Prop({ required: true })
+  @Prop({ required: false })
   nameUnit: string;
 
-  @Prop({ required: true })
+  @Prop({ required: false })
   apartment: string;
 
   @Prop({ required: true })
@@ -39,7 +39,25 @@ export class Holliday {
   name: string;
 
   @Prop({ required: true })
+  cel: string;
+
+  @Prop({ required: true })
   price: string;
+
+  @Prop({ required: true })
+  status: boolean;
+
+  @Prop({ required: true })
+  maxGuests: number;
+
+  @Prop({ required: true })
+  parking: boolean;
+
+  @Prop({ required: true })
+  petsAllowed: boolean;
+
+  @Prop({ required: true })
+  ruleshome: string;
 
   @Prop({ required: true })
   description: string;

@@ -74,7 +74,13 @@ export class HollidayController {
       country: string;
       address: string;
       name: string;
+      cel: string;
       price: string;
+      status: boolean;
+      maxGuests: number;
+      parking: boolean;
+      petsAllowed: boolean;
+      ruleshome: string;
       description: string;
     }[]
   > {
@@ -95,7 +101,13 @@ export class HollidayController {
         country: body.country,
         address: body.address,
         name: body.name,
+        cel: body.cel,
         price: body.price,
+        status: body.status,
+        maxGuests: body.maxGuests,
+        parking: body.parking,
+        petsAllowed: body.petsAllowed,
+        ruleshome: body.ruleshome,
         description: body.description,
       };
 
@@ -120,7 +132,13 @@ export class HollidayController {
           country: response.country,
           address: response.address,
           name: response.name,
+          cel: response.cel,
           price: response.price,
+          status: response.status,
+          maxGuests: response.maxGuests,
+          parking: response.parking,
+          petsAllowed: response.petsAllowed,
+          ruleshome: response.ruleshome,
           description: response.description,
         },
       ];

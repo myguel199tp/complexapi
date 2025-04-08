@@ -26,6 +26,10 @@ export class CreateVenteDto {
 
   @IsNotEmpty()
   @IsString()
+  address: string;
+
+  @IsNotEmpty()
+  @IsString()
   country: string;
 
   @IsNotEmpty()
