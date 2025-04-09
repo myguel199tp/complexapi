@@ -7,17 +7,19 @@ import {
   HttpStatus,
   HttpException,
   UseInterceptors,
-  UploadedFile,
+  UploadedFiles,
   UseGuards,
 } from '@nestjs/common';
 import { ActivitiesService } from './activities.service';
 import { CreateActivityDto } from './dto/create-activity.dto';
-import { ApiOperation, ApiQuery, ApiTags } from '@nestjs/swagger';
-import { FileInterceptor } from '@nestjs/platform-express';
+import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import { FilesInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { RolesGuard } from 'src/auth/roles.guard';
 import { Roles } from 'src/auth/roles.decorator';
+import * as path from 'path';
+
 @ApiTags('activities')
 @Controller('activities')
 @UseGuards(JwtAuthGuard)
@@ -30,16 +32,13 @@ export class ActivitiesController {
   @UseGuards(RolesGuard)
   @Roles('admins')
   @UseInterceptors(
-    FileInterceptor('file', {
+    FilesInterceptor('files', 10, {
       storage: diskStorage({
         destination: './uploads',
         filename: (req, file, cb) => {
-          const originalName = file.originalname
-            .split('.')
-            .slice(0, -1)
-            .join('.');
-          const fileExt = file.originalname.split('.').pop();
-          const filename = `${originalName}-${Date.now()}.${fileExt}`;
+          const name = path.parse(file.originalname).name;
+          const ext = path.extname(file.originalname);
+          const filename = `${name}-${Date.now()}${ext}`;
           cb(null, filename);
         },
       }),
@@ -57,20 +56,21 @@ export class ActivitiesController {
       },
     }),
   )
-  @HttpCode(HttpStatus.CREATED)
   async register(
-    @UploadedFile() file: Express.Multer.File,
+    @UploadedFiles() files: Express.Multer.File[],
     @Body() createActivityDto: CreateActivityDto,
   ) {
     try {
-      if (!file) {
+      if (!files || files.length === 0) {
         throw new HttpException(
-          'El archivo es obligatorio.',
+          'Al menos un archivo es obligatorio.',
           HttpStatus.BAD_REQUEST,
         );
       }
 
-      createActivityDto.file = file.path;
+      // Puedes guardar todas las rutas en un array
+      createActivityDto.files = files.map((file) => file.path);
+
       const newActivity = await this.activitiesService.registerNew(
         createActivityDto,
       );
@@ -80,12 +80,12 @@ export class ActivitiesController {
         user: newActivity,
       };
     } catch (error) {
-      console.error('Error al registrar usuario:', error);
+      console.error('Error al registrar actividad:', error);
 
       throw new HttpException(
         {
           status: HttpStatus.BAD_REQUEST,
-          error: error || 'No se pudo Registrar al visitante',
+          error: error || 'No se pudo Registrar la actividad',
         },
         HttpStatus.BAD_REQUEST,
       );

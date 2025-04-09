@@ -16,7 +16,7 @@ import { AuthService } from './auth.service';
 import { RegisterAuthDto } from './dto/register-auth.dto';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { LoginAuthConjuntoDto, LoginAuthDto } from './dto/login-auth.dto';
-import { CreateSaleDto } from 'src/sales/dto/create-sale.dto';
+// import { CreateSaleDto } from 'src/sales/dto/create-sale.dto';
 import { CreateFileDto } from 'src/file/dto/create-file.dto';
 import { Response } from 'express';
 import { FileInterceptor } from '@nestjs/platform-express';
@@ -140,9 +140,9 @@ export class AuthController {
   @Post(':_id/sales')
   addSaleToUser(
     @Param('_id') userId: string,
-    @Body() createSaleDto: CreateSaleDto,
+    // @Body() createSaleDto: CreateSaleDto,
   ) {
-    return this.authService.addSaleToUser(userId, createSaleDto);
+    return this.authService.addSaleToUser(userId);
   }
 
   @Post(':_id/commerce')

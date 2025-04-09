@@ -1,5 +1,12 @@
 /* eslint-disable prettier/prettier */
-import { IsEmail, IsNotEmpty, IsNumber, IsString } from 'class-validator';
+import {
+  IsArray,
+  IsEmail,
+  IsNotEmpty,
+  IsNumber,
+  IsOptional,
+  IsString,
+} from 'class-validator';
 
 export class CreateVenteDto {
   @IsNotEmpty()
@@ -64,6 +71,13 @@ export class CreateVenteDto {
   @IsString()
   description: string;
 
-  created_at: Date;
-  finished_at: Date;
+  @IsOptional()
+  @IsString()
+  files: string[];
+
+  @IsString()
+  created_at: string;
+
+  @IsString()
+  finished_at: string;
 }

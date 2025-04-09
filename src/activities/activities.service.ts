@@ -13,11 +13,11 @@ export class ActivitiesService {
   ) {}
   async registerNew(createActivityDto: CreateActivityDto): Promise<any> {
     try {
-      const visitUser = new this.activityModule({
+      const activityUser = new this.activityModule({
         ...createActivityDto,
       });
 
-      return await visitUser.save();
+      return await activityUser.save();
     } catch (error) {
       throw new HttpException(
         `Error al registrar el actividad: ${error}`,

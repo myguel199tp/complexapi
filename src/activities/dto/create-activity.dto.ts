@@ -21,5 +21,5 @@ export class CreateActivityDto {
   dateHourEnd: string;
   @IsOptional()
   @IsString()
-  file?: string;
+  files: string[];
 }

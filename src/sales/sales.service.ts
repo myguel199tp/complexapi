@@ -1,116 +1,28 @@
 /* eslint-disable prettier/prettier */
-import { Injectable } from '@nestjs/common';
-import { CreateSaleDto } from './dto/create-sale.dto';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { UpdateSaleDto } from './dto/update-sale.dto';
 import { InjectModel } from '@nestjs/mongoose';
 import { Sales, SalesDocument } from './shema/sales.shema';
 import { Model } from 'mongoose';
+import { CreateVenteDto } from './dto/create-vente.dto';
 
 @Injectable()
 export class SalesService {
   constructor(
-    @InjectModel(Sales.name) private salesModule: Model<SalesDocument>,
+    @InjectModel(Sales.name)
+    private salesModule: Model<SalesDocument>,
   ) {}
-
-  async uploadFiles(createSaleDto: CreateSaleDto): Promise<{
-    files: {
-      originalname: string;
-      filename: string;
-      mimetype: string;
-      size: number;
-      _id: number;
-      __v: number;
-    }[];
-    iduser: string;
-    ofert: string;
-    email: string;
-    phone: string;
-    parking: string;
-    neighborhood: string;
-    address: string;
-    country: string;
-    city: string;
-    property: string;
-    stratum: string;
-    price: string;
-    room: string;
-    restroom: string;
-    age: string;
-    administration: string;
-    area: string;
-    description: string;
-    created_at: Date;
-    finished_at: Date;
-  }> {
+  async registerNew(createVenteDto: CreateVenteDto): Promise<any> {
     try {
-      const filesData = createSaleDto.files.map((file) => ({
-        originalname: file.originalname,
-        filename: file.originalname,
-        mimetype: file.mimetype,
-        size: file.size,
-        buffer: file.buffer,
-      }));
-
-      const saleInstance = new this.salesModule({
-        files: filesData,
-        iduser: createSaleDto.iduser,
-        ofert: createSaleDto.ofert,
-        email: createSaleDto.email,
-        phone: createSaleDto.phone,
-        parking: createSaleDto.parking,
-        neighborhood: createSaleDto.neighborhood,
-        address: createSaleDto.address,
-        country: createSaleDto.country,
-        city: createSaleDto.city,
-        property: createSaleDto.property,
-        stratum: createSaleDto.stratum,
-        price: createSaleDto.price,
-        room: createSaleDto.room,
-        restroom: createSaleDto.restroom,
-        age: createSaleDto.age,
-        administration: createSaleDto.administration,
-        area: createSaleDto.area,
-        description: createSaleDto.description,
-        created_at: createSaleDto.created_at,
-        finished_at: createSaleDto.finished_at,
+      const salesUser = new this.salesModule({
+        ...createVenteDto,
       });
 
-      const savedSale = await saleInstance.save();
-
-      return {
-        files: savedSale.files.map((file) => ({
-          originalname: file.originalname,
-          filename: file.filename,
-          mimetype: file.mimetype,
-          size: file.size,
-          _id: file._id,
-          __v: file.__v,
-        })),
-        ofert: savedSale.ofert,
-        iduser: savedSale.iduser,
-        email: savedSale.email,
-        phone: savedSale.phone,
-        parking: savedSale.parking,
-        neighborhood: savedSale.neighborhood,
-        address: savedSale.address,
-        country: savedSale.country,
-        city: savedSale.city,
-        property: savedSale.property,
-        stratum: savedSale.stratum,
-        price: savedSale.price,
-        room: savedSale.room,
-        restroom: savedSale.restroom,
-        age: savedSale.age,
-        administration: savedSale.administration,
-        area: savedSale.area,
-        description: savedSale.description,
-        created_at: savedSale.created_at,
-        finished_at: savedSale.finished_at,
-      };
+      return await salesUser.save();
     } catch (error) {
-      console.error(error);
-      throw new Error(
-        'Error al guardar los archivos en la base de datos. Detalles: ' + error,
+      throw new HttpException(
+        `Error al registrar el actividad: ${error}`,
+        HttpStatus.INTERNAL_SERVER_ERROR,
       );
     }
   }

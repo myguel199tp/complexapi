@@ -4,6 +4,7 @@ import {
   Get,
   Post,
   Body,
+  HttpCode,
   Put,
   Delete,
   Param,
@@ -12,36 +13,37 @@ import {
   UseInterceptors,
   HttpException,
   HttpStatus,
+  UseGuards,
 } from '@nestjs/common';
 import { SalesService } from './sales.service';
 import { UpdateSaleDto } from './dto/update-sale.dto';
-import { FilesInterceptor } from '@nestjs/platform-express/multer/interceptors/files.interceptor';
+import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import { FilesInterceptor } from '@nestjs/platform-express';
 import { CreateVenteDto } from './dto/create-vente.dto';
-// import { CreateSaleDto } from './dto/create-sale.dto';
 import { diskStorage } from 'multer';
-import { ApiTags } from '@nestjs/swagger';
-import { CreateSaleDto } from './dto/create-sale.dto';
+import * as path from 'path';
+import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
+import { Roles } from 'src/auth/roles.decorator';
+import { RolesGuard } from 'src/auth/roles.guard';
 @ApiTags('sales')
 @Controller('sales')
+@UseGuards(JwtAuthGuard)
 export class SalesController {
   constructor(private readonly salesService: SalesService) {}
 
-  @Post('uploadcrate')
+  @Post('register-immueble')
+  @ApiOperation({ summary: 'Crear un nueva actividad' })
+  @HttpCode(HttpStatus.CREATED)
+  @UseGuards(RolesGuard)
+  @Roles('useradmin')
   @UseInterceptors(
     FilesInterceptor('files', 10, {
       storage: diskStorage({
-        destination: (req, file, cb) => {
-          cb(null, './uploads');
-        },
+        destination: './uploads',
         filename: (req, file, cb) => {
-          const originalnameWithoutExtension = file.originalname
-            .split('.')
-            .slice(0, -1)
-            .join('.');
-          const filename = `${originalnameWithoutExtension}.${file.originalname
-            .split('.')
-            .pop()}`;
-          console.log({ filename });
+          const name = path.parse(file.originalname).name;
+          const ext = path.extname(file.originalname);
+          const filename = `${name}-${Date.now()}${ext}`;
           cb(null, filename);
         },
       }),
@@ -59,83 +61,35 @@ export class SalesController {
       },
     }),
   )
-  async uploadFiles(
+  async register(
     @UploadedFiles() files: Express.Multer.File[],
-    @Body() body: CreateVenteDto,
+    @Body() createVenteDto: CreateVenteDto,
   ) {
     try {
       if (!files || files.length === 0) {
         throw new HttpException(
-          'No se encontró ningún archivo.',
+          'Al menos un archivo es obligatorio.',
           HttpStatus.BAD_REQUEST,
         );
       }
 
-      const createSaleDto: CreateSaleDto = {
-        files: files,
-        iduser: body.iduser,
-        ofert: body.ofert,
-        email: body.email,
-        phone: body.phone,
-        parking: body.parking,
-        neighborhood: body.neighborhood,
-        address: body.address,
-        country: body.country,
-        city: body.city,
-        property: body.property,
-        stratum: body.stratum,
-        price: body.price,
-        room: body.room,
-        restroom: body.restroom,
-        age: body.age,
-        administration: body.administration,
-        area: body.area,
-        description: body.description,
-        created_at: body.created_at,
-        finished_at: body.finished_at,
+      createVenteDto.files = files.map((file) => file.path);
+
+      const newImmueble = await this.salesService.registerNew(createVenteDto);
+
+      return {
+        message: 'Registro exitoso',
+        user: newImmueble,
       };
-
-      const response = await this.salesService.uploadFiles(createSaleDto);
-
-      const formattedResponse = [
-        {
-          files: response.files.map((file) => ({
-            originalname: file.originalname,
-            filename: file.filename,
-            mimetype: file.mimetype,
-            size: file.size,
-            _id: file._id,
-            __v: file.__v,
-          })),
-          ofert: response.ofert,
-          iduser: response.iduser,
-          email: response.email,
-          phone: response.phone,
-          parking: response.parking,
-          neighborhood: response.neighborhood,
-          address: response.address,
-          country: response.country,
-          city: response.city,
-          property: response.property,
-          stratum: response.stratum,
-          price: response.price,
-          room: response.room,
-          restroom: response.restroom,
-          age: response.age,
-          administration: response.administration,
-          area: response.area,
-          description: response.description,
-          created_at: response.created_at,
-          finished_at: response.finished_at,
-        },
-      ];
-
-      return formattedResponse;
     } catch (error) {
-      console.error('Error uploading files:', error);
+      console.error('Error al registrar inmueble:', error);
+
       throw new HttpException(
-        'Error al subir los archivos.',
-        HttpStatus.INTERNAL_SERVER_ERROR,
+        {
+          status: HttpStatus.BAD_REQUEST,
+          error: error || 'No se pudo Registrar el inmueble',
+        },
+        HttpStatus.BAD_REQUEST,
       );
     }
   }

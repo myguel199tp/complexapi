@@ -4,76 +4,68 @@ import { Document } from 'mongoose';
 
 export type SalesDocument = Sales & Document;
 
-export interface misFiles {
-  originalname: string;
-  filename: string;
-  mimetype: string;
-  size: number;
-  _id: number;
-  __v: number;
-}
-
 @Schema()
 export class Sales {
   @Prop()
-  files: misFiles[];
-
-  @Prop({ required: true })
   iduser: string;
 
-  @Prop({ required: true })
+  @Prop()
   ofert: string;
 
-  @Prop({ required: true })
+  @Prop()
   email: string;
 
-  @Prop({ required: true })
+  @Prop()
   phone: string;
 
-  @Prop({ required: true })
+  @Prop()
   parking: string;
 
-  @Prop({ required: true })
+  @Prop()
   neighborhood: string;
 
-  @Prop({ required: true })
+  @Prop()
   address: string;
 
-  @Prop({ required: true })
+  @Prop()
   country: string;
 
-  @Prop({ required: true })
+  @Prop()
   city: string;
 
-  @Prop({ required: true })
+  @Prop()
   property: string;
 
-  @Prop({ required: true })
+  @Prop()
   stratum: string;
 
-  @Prop({ required: true })
+  @Prop()
   price: string;
 
-  @Prop({ required: true })
+  @Prop()
   room: string;
 
-  @Prop({ required: true })
+  @Prop()
   restroom: string;
 
-  @Prop({ required: true })
+  @Prop()
   age: string;
 
-  @Prop({ required: true })
+  @Prop()
   administration: string;
 
-  @Prop({ required: true })
+  @Prop()
   area: string;
 
-  @Prop({ required: true })
+  @Prop()
   description: string;
 
-  created_at: Date;
-  finished_at: Date;
+  @Prop()
+  files: string[];
+  @Prop()
+  created_at: string;
+  @Prop()
+  finished_at: string;
 }
 
 export const SalesSchema = SchemaFactory.createForClass(Sales);
