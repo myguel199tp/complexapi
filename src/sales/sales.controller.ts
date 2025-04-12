@@ -23,19 +23,15 @@ import { CreateVenteDto } from './dto/create-vente.dto';
 import { diskStorage } from 'multer';
 import * as path from 'path';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
-import { Roles } from 'src/auth/roles.decorator';
-import { RolesGuard } from 'src/auth/roles.guard';
 @ApiTags('sales')
 @Controller('sales')
-@UseGuards(JwtAuthGuard)
 export class SalesController {
   constructor(private readonly salesService: SalesService) {}
 
   @Post('register-immueble')
+  @UseGuards(JwtAuthGuard)
   @ApiOperation({ summary: 'Crear un nueva actividad' })
   @HttpCode(HttpStatus.CREATED)
-  @UseGuards(RolesGuard)
-  @Roles('useradmin')
   @UseInterceptors(
     FilesInterceptor('files', 10, {
       storage: diskStorage({

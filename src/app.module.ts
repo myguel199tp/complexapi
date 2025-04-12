@@ -37,6 +37,7 @@ import { HollidayModule } from './holliday/holliday.module';
 import { ChatModule } from './chat/chat.module';
 import { VisitModule } from './visit/visit.module';
 import { BookingModule } from './booking/booking.module';
+import { PropertyHolidayModule } from './property-holiday/property-holiday.module';
 
 @Module({
   imports: [
@@ -73,6 +74,7 @@ import { BookingModule } from './booking/booking.module';
     HollidayModule,
     VisitModule,
     BookingModule,
+    PropertyHolidayModule,
   ],
   controllers: [AppController],
   providers: [AppService],
