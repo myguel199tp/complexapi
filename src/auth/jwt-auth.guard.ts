@@ -22,7 +22,7 @@ export class JwtAuthGuard implements CanActivate {
       throw new UnauthorizedException('No se proporcionó un token');
     }
 
-    const token = authHeader.split(' ')[1]; // "Bearer <token>"
+    const token = authHeader.split(' ')[1];
     try {
       const decoded = this.jwtService.verify(token);
       request.user = decoded;

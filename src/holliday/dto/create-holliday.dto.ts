@@ -1,8 +1,6 @@
 import { IsNotEmpty, IsString, IsBoolean, IsOptional } from 'class-validator';
 
 export class CreateHollidayDto {
-  nameUnit: string;
-
   @IsNotEmpty()
   @IsString()
   neigborhood: string;
