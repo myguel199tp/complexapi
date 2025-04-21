@@ -8,6 +8,8 @@ import {
   HttpStatus,
   HttpException,
   UseGuards,
+  Get,
+  Query,
 } from '@nestjs/common';
 import { FilesInterceptor } from '@nestjs/platform-express';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
@@ -19,11 +21,11 @@ import * as path from 'path';
 
 @ApiTags('hollidays')
 @Controller('hollidays')
-@UseGuards(JwtAuthGuard)
 export class HollidayController {
   constructor(private readonly hollidayService: HollidayService) {}
 
   @Post('create-holliday')
+  @UseGuards(JwtAuthGuard)
   @ApiOperation({ summary: 'Crear un nuevo hollyday' })
   @HttpCode(HttpStatus.CREATED)
   @UseInterceptors(
@@ -85,5 +87,13 @@ export class HollidayController {
         HttpStatus.BAD_REQUEST,
       );
     }
+  }
+
+  @Get('byAllData')
+  findAllByAllMethods(
+    @Query('neigborhood') neigborhood?: string,
+    @Query('city') city?: string,
+  ) {
+    return this.hollidayService.findAllByAllMethods(neigborhood, city);
   }
 }

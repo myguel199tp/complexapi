@@ -1,9 +1,9 @@
 import { IsNotEmpty, IsString, IsBoolean, IsOptional } from 'class-validator';
 
 export class CreateHollidayDto {
-  @IsNotEmpty()
+  @IsOptional()
   @IsString()
-  neigborhood: string;
+  neigborhood?: string;
 
   @IsNotEmpty()
   @IsString()
@@ -27,15 +27,11 @@ export class CreateHollidayDto {
 
   @IsNotEmpty()
   @IsString()
-  status: boolean;
-
-  @IsNotEmpty()
-  @IsString()
   maxGuests: number;
 
   @IsNotEmpty()
   @IsString()
-  parking: boolean;
+  parking: string;
 
   @IsNotEmpty()
   @IsString()
@@ -52,4 +48,29 @@ export class CreateHollidayDto {
   @IsOptional()
   @IsString()
   files: string[];
+
+  @IsString()
+  @IsOptional()
+  promotion?: string;
+
+  @IsNotEmpty()
+  @IsString()
+  nameUnit: string;
+
+  @IsNotEmpty()
+  @IsString()
+  apartment: string;
+
+  @IsNotEmpty()
+  @IsString()
+  cel: string;
+
+  @IsString()
+  startDate: string;
+
+  @IsString()
+  endDate: string;
+
+  @IsString()
+  created_at: string;
 }

@@ -24,6 +24,22 @@ export class HollidayService {
       );
     }
   }
+
+  async findAllByAllMethods(neigborhood?: string, city?: string) {
+    const query: any = {};
+
+    if (neigborhood !== undefined) {
+      query.neigborhood = neigborhood;
+    }
+
+    if (city !== undefined) {
+      query.city = city;
+    }
+
+    const list = await this.hollidayModel.find(query).exec();
+    return list;
+  }
+
   async findAll(): Promise<Holliday[]> {
     return this.hollidayModel.find().exec();
   }

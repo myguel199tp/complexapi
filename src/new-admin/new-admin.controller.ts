@@ -62,7 +62,6 @@ export class NewAdminController {
       },
     }),
   )
-  @HttpCode(HttpStatus.CREATED)
   async register(
     @UploadedFile() file: Express.Multer.File,
     @Body() createNewAdminDto: CreateNewAdminDto,

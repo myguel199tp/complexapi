@@ -3,26 +3,8 @@ import { Document } from 'mongoose';
 
 export type HollidayDocument = Holliday & Document;
 
-export interface misFiles {
-  originalname: string;
-  filename: string;
-  mimetype: string;
-  size: number;
-  _id: string;
-  __v: number;
-}
-
 @Schema()
 export class Holliday {
-  @Prop()
-  files: misFiles[];
-
-  @Prop({ required: false })
-  nameUnit: string;
-
-  @Prop({ required: false })
-  apartment: string;
-
   @Prop({ required: true })
   neigborhood: string;
 
@@ -39,19 +21,13 @@ export class Holliday {
   name: string;
 
   @Prop({ required: true })
-  cel: string;
-
-  @Prop({ required: true })
   price: string;
-
-  @Prop({ required: true })
-  status: boolean;
 
   @Prop({ required: true })
   maxGuests: number;
 
   @Prop({ required: true })
-  parking: boolean;
+  parking: string;
 
   @Prop({ required: true })
   petsAllowed: boolean;
@@ -61,6 +37,30 @@ export class Holliday {
 
   @Prop({ required: true })
   description: string;
+
+  @Prop()
+  files: string[];
+
+  @Prop({ required: false })
+  promotion?: string;
+
+  @Prop({ required: false })
+  nameUnit: string;
+
+  @Prop({ required: false })
+  apartment?: string;
+
+  @Prop({ required: true })
+  cel: string;
+
+  @Prop()
+  startDate: string;
+
+  @Prop()
+  endDate: string;
+
+  @Prop()
+  created_at: string;
 }
 
 export const HollidaySchema = SchemaFactory.createForClass(Holliday);

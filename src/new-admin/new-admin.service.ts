@@ -37,7 +37,9 @@ export class NewAdminService {
     const filter = nameUnit
       ? { nameUnit: { $regex: new RegExp(nameUnit, 'i') } }
       : {};
-    const list = await this.infoNewModule.find(filter);
+
+    const list = await this.infoNewModule.find(filter).sort({ createdAt: -1 }); // -1 para descendente (más reciente primero)
+
     return list;
   }
 

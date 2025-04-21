@@ -19,7 +19,7 @@ export class Activity {
   @Prop()
   dateHourEnd: string;
   @Prop()
-  files: string[];
+  file: string;
 }
 
 export const ActivitySchema = SchemaFactory.createForClass(Activity);

@@ -16,6 +16,8 @@ export class InfoNewAdmin {
   mailAdmin: string;
   @Prop()
   file?: string;
+  @Prop()
+  created_at: string;
 }
 
 export const InfoNewAdminSchema = SchemaFactory.createForClass(InfoNewAdmin);

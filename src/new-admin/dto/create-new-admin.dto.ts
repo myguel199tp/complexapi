@@ -36,4 +36,7 @@ export class CreateNewAdminDto {
   @IsOptional()
   @IsString()
   file?: string;
+
+  @IsString()
+  created_at: string;
 }

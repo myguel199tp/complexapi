@@ -9,16 +9,18 @@ import {
   UseInterceptors,
   UploadedFiles,
   UseGuards,
+  UploadedFile,
+  Param,
+  Patch,
 } from '@nestjs/common';
 import { ActivitiesService } from './activities.service';
 import { CreateActivityDto } from './dto/create-activity.dto';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
-import { FilesInterceptor } from '@nestjs/platform-express';
+import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { RolesGuard } from 'src/auth/roles.guard';
 import { Roles } from 'src/auth/roles.decorator';
-import * as path from 'path';
 
 @ApiTags('activities')
 @Controller('activities')
@@ -32,13 +34,16 @@ export class ActivitiesController {
   @UseGuards(RolesGuard)
   @Roles('admins')
   @UseInterceptors(
-    FilesInterceptor('files', 10, {
+    FileInterceptor('file', {
       storage: diskStorage({
         destination: './uploads',
         filename: (req, file, cb) => {
-          const name = path.parse(file.originalname).name;
-          const ext = path.extname(file.originalname);
-          const filename = `${name}-${Date.now()}${ext}`;
+          const originalName = file.originalname
+            .split('.')
+            .slice(0, -1)
+            .join('.');
+          const fileExt = file.originalname.split('.').pop();
+          const filename = `${originalName}-${Date.now()}.${fileExt}`;
           cb(null, filename);
         },
       }),
@@ -57,35 +62,33 @@ export class ActivitiesController {
     }),
   )
   async register(
-    @UploadedFiles() files: Express.Multer.File[],
+    @UploadedFile() file: Express.Multer.File,
     @Body() createActivityDto: CreateActivityDto,
   ) {
     try {
-      if (!files || files.length === 0) {
+      if (!file) {
         throw new HttpException(
-          'Al menos un archivo es obligatorio.',
+          'El archivo es obligatorio.',
           HttpStatus.BAD_REQUEST,
         );
       }
 
-      // Puedes guardar todas las rutas en un array
-      createActivityDto.files = files.map((file) => file.path);
-
-      const newActivity = await this.activitiesService.registerNew(
+      createActivityDto.file = file.path;
+      const newAdmin = await this.activitiesService.registerActivity(
         createActivityDto,
       );
 
       return {
-        message: 'Actividad registrada de forma exitosa',
-        user: newActivity,
+        message: 'Noticia creada de forma exitosa',
+        user: newAdmin,
       };
     } catch (error) {
-      console.error('Error al registrar actividad:', error);
+      console.error('Error al registrar usuario:', error);
 
       throw new HttpException(
         {
           status: HttpStatus.BAD_REQUEST,
-          error: error || 'No se pudo Registrar la actividad',
+          error: error || 'No se pudo crear la actividad',
         },
         HttpStatus.BAD_REQUEST,
       );
@@ -95,5 +98,70 @@ export class ActivitiesController {
   @Get('allActivities')
   findAllWithoutFilter() {
     return this.activitiesService.findAll();
+  }
+
+  @Patch('update-activity/:id')
+  @ApiOperation({ summary: 'Actualizar una actividad existente' })
+  @HttpCode(HttpStatus.OK)
+  @UseGuards(RolesGuard)
+  @Roles('admins')
+  @UseInterceptors(
+    FileInterceptor('file', {
+      storage: diskStorage({
+        destination: './uploads',
+        filename: (req, file, cb) => {
+          const originalName = file.originalname
+            .split('.')
+            .slice(0, -1)
+            .join('.');
+          const fileExt = file.originalname.split('.').pop();
+          const filename = `${originalName}-${Date.now()}.${fileExt}`;
+          cb(null, filename);
+        },
+      }),
+      fileFilter: (req, file, cb) => {
+        if (file && !file.originalname.match(/\.(jpg|jpeg|png)$/)) {
+          return cb(
+            new HttpException(
+              'Solo se permiten archivos JPG o PNG',
+              HttpStatus.BAD_REQUEST,
+            ),
+            false,
+          );
+        }
+        cb(null, true);
+      },
+    }),
+  )
+  async updateActivity(
+    @Param('_id') _id: string,
+    @UploadedFile() file: Express.Multer.File,
+    @Body() updateActivityDto: CreateActivityDto,
+  ) {
+    try {
+      if (file) {
+        updateActivityDto.file = file.path;
+      }
+
+      const updated = await this.activitiesService.update(
+        _id,
+        updateActivityDto,
+      );
+
+      return {
+        message: 'Actividad actualizada con éxito',
+        data: updated,
+      };
+    } catch (error) {
+      console.error('Error al actualizar actividad:', error);
+
+      throw new HttpException(
+        {
+          status: HttpStatus.BAD_REQUEST,
+          error: error || 'No se pudo actualizar la actividad',
+        },
+        HttpStatus.BAD_REQUEST,
+      );
+    }
   }
 }

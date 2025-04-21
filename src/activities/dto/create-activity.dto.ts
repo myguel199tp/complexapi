@@ -7,7 +7,6 @@ export class CreateActivityDto {
   @IsNotEmpty({ message: 'El campo unidad es obligatorio.' })
   nameUnit: string;
   @IsString()
-  @IsString()
   @IsNotEmpty({ message: 'El campo actividad es obligatorio.' })
   activity: string;
   @IsString()
@@ -21,5 +20,5 @@ export class CreateActivityDto {
   dateHourEnd: string;
   @IsOptional()
   @IsString()
-  files: string[];
+  file: string;
 }

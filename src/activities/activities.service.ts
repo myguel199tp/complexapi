@@ -1,9 +1,15 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import {
+  HttpException,
+  HttpStatus,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { CreateActivityDto } from './dto/create-activity.dto';
 import { UpdateActivityDto } from './dto/update-activity.dto';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Activity, ActivityDocument } from './shema/activity.shema';
+import * as fs from 'fs';
 
 @Injectable()
 export class ActivitiesService {
@@ -11,7 +17,7 @@ export class ActivitiesService {
     @InjectModel(Activity.name)
     private activityModule: Model<ActivityDocument>,
   ) {}
-  async registerNew(createActivityDto: CreateActivityDto): Promise<any> {
+  async registerActivity(createActivityDto: CreateActivityDto): Promise<any> {
     try {
       const activityUser = new this.activityModule({
         ...createActivityDto,
@@ -40,8 +46,28 @@ export class ActivitiesService {
     return `This action returns a #${id} activity`;
   }
 
-  update(id: number, updateActivityDto: UpdateActivityDto) {
-    return `This action updates a #${id} activity`;
+  async update(id: string, updateActivityDto: UpdateActivityDto) {
+    const activity = await this.activityModule.findById(id);
+
+    if (!activity) {
+      throw new NotFoundException(`No se encontró la actividad con id ${id}`);
+    }
+
+    // Si se subió un nuevo archivo, eliminar el anterior
+    if (updateActivityDto.file && activity.file) {
+      fs.unlink(activity.file, (err) => {
+        if (err) {
+          console.warn('No se pudo eliminar el archivo anterior:', err);
+        }
+      });
+    }
+
+    // Actualizar los campos
+    Object.assign(activity, updateActivityDto);
+
+    await activity.save();
+
+    return activity;
   }
 
   remove(id: number) {
