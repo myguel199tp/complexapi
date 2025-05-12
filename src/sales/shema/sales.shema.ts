@@ -19,7 +19,7 @@ export class Sales {
   phone: string;
 
   @Prop()
-  parking: string;
+  parking?: string;
 
   @Prop()
   neighborhood: string;
@@ -34,25 +34,25 @@ export class Sales {
   city: string;
 
   @Prop()
-  property: string;
+  property?: string;
 
   @Prop()
-  stratum: string;
+  stratum?: string;
 
   @Prop()
   price: string;
 
   @Prop()
-  room: string;
+  room?: string;
 
   @Prop()
-  restroom: string;
+  restroom?: string;
 
   @Prop()
-  age: string;
+  age?: string;
 
   @Prop()
-  administration: string;
+  administration?: string;
 
   @Prop()
   area: string;

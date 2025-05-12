@@ -1,12 +1,5 @@
 /* eslint-disable prettier/prettier */
-import {
-  IsArray,
-  IsEmail,
-  IsNotEmpty,
-  IsNumber,
-  IsOptional,
-  IsString,
-} from 'class-validator';
+import { IsEmail, IsNotEmpty, IsOptional, IsString } from 'class-validator';
 
 export class CreateVenteDto {
   @IsNotEmpty()
@@ -14,6 +7,7 @@ export class CreateVenteDto {
   iduser: string;
 
   @IsString()
+  @IsOptional()
   ofert: string;
 
   @IsNotEmpty()
@@ -25,6 +19,7 @@ export class CreateVenteDto {
   phone: string;
 
   @IsString()
+  @IsOptional()
   parking: string;
 
   @IsNotEmpty()
@@ -41,10 +36,12 @@ export class CreateVenteDto {
 
   @IsNotEmpty()
   @IsString()
+  @IsOptional()
   city: string;
 
   @IsNotEmpty()
   @IsString()
+  @IsOptional()
   property: string;
 
   @IsString()
@@ -54,15 +51,19 @@ export class CreateVenteDto {
   price: string;
 
   @IsString()
+  @IsOptional()
   room: string;
 
   @IsString()
+  @IsOptional()
   restroom: string;
 
   @IsNotEmpty()
+  @IsOptional()
   age: string;
 
   @IsString()
+  @IsOptional()
   administration: string;
 
   @IsNotEmpty()
@@ -71,7 +72,6 @@ export class CreateVenteDto {
   @IsString()
   description: string;
 
-  @IsOptional()
   @IsString()
   files: string[];
 

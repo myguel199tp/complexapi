@@ -92,7 +92,9 @@ export class SalesController {
 
   @Get('byAllData')
   findAllByAllMethods(
+    @Query('ofert') ofert?: string,
     @Query('stratum') stratum?: string,
+    @Query('iduser') iduser?: string,
     @Query('room') room?: string,
     @Query('restroom') restroom?: string,
     @Query('age') age?: string,
@@ -104,7 +106,9 @@ export class SalesController {
     @Query('maxArea') maxArea?: string,
   ) {
     return this.salesService.findAllByAllMethods(
+      ofert,
       stratum,
+      iduser,
       room,
       restroom,
       age,
@@ -118,8 +122,8 @@ export class SalesController {
   }
 
   @Get('byuser')
-  findOne(@Query('iduser') iduser?: string) {
-    return this.salesService.findAllByAllMethods(iduser);
+  findOne(@Query('_id') _id?: any) {
+    return this.salesService.find(_id);
   }
 
   @Get('byProperty/:property')

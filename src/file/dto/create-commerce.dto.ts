@@ -1,49 +1,42 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty, IsString } from 'class-validator';
+import { IsEmail, IsNotEmpty, IsString } from 'class-validator';
 
 export class CreateCommerceDto {
-  @ApiProperty({ description: 'El identificador del usuario' })
+  @IsNotEmpty()
   @IsString()
-  @IsNotEmpty({ message: 'El campo id es obligatorio.' })
   iduser: string;
 
-  @ApiProperty({ description: 'El nombre' })
+  @IsNotEmpty()
   @IsString()
-  @IsNotEmpty({ message: 'El campo nombre es obligatorio.' })
-  names: string;
+  name: string;
 
-  @ApiProperty({ description: 'El contacto' })
+  @IsNotEmpty()
   @IsString()
-  @IsNotEmpty({ message: 'El campo contacto es obligatorio.' })
-  contact: string;
+  nameUnit: string;
 
-  @ApiProperty({ description: 'El correo' })
+  @IsNotEmpty()
   @IsString()
-  @IsNotEmpty({ message: 'El campo correo es obligatorio.' })
-  maill: string;
+  profession: string;
 
-  @ApiProperty({ description: 'El celular' })
+  @IsNotEmpty()
   @IsString()
-  @IsNotEmpty({ message: 'El campo celular es obligatorio.' })
-  phoneNum: string;
+  webPage: string;
 
-  @ApiProperty({ description: 'El tipo de servicio' })
-  @IsString()
-  @IsNotEmpty({ message: 'El campo servicio es obligatorio.' })
-  typeService: string;
+  @IsNotEmpty()
+  email: string;
 
-  @ApiProperty({ description: 'La descripción' })
-  @IsString()
-  @IsNotEmpty({ message: 'El campo descripción es obligatorio.' })
-  descripton: string;
+  @IsNotEmpty()
+  description: string;
 
-  @ApiProperty({ description: 'El país' })
+  @IsNotEmpty()
   @IsString()
-  @IsNotEmpty({ message: 'El campo país es obligatorio.' })
-  country: string;
+  phone: string;
 
-  @ApiProperty({ description: 'La ciudad' })
+  files: string[];
+
   @IsString()
-  @IsNotEmpty({ message: 'El campo ciudad es obligatorio.' })
-  city: string;
+  created_at: string;
+
+  @IsString()
+  finished_at: string;
 }

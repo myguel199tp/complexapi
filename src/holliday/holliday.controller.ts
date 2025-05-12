@@ -91,9 +91,14 @@ export class HollidayController {
 
   @Get('byAllData')
   findAllByAllMethods(
-    @Query('neigborhood') neigborhood?: string,
-    @Query('city') city?: string,
+    @Query('property') property?: string,
+    @Query('minPrice') minPrice?: string,
+    @Query('maxPrice') maxPrice?: string,
   ) {
-    return this.hollidayService.findAllByAllMethods(neigborhood, city);
+    return this.hollidayService.findAllByAllMethods(
+      property,
+      minPrice,
+      maxPrice,
+    );
   }
 }

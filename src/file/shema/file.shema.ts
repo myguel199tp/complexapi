@@ -4,49 +4,40 @@ import { Document } from 'mongoose';
 
 export type FileDocument = File & Document;
 
-export interface misFiles {
-  originalname: string;
-  filename: string;
-  mimetype: string;
-  size: number;
-  _id: string;
-  __v: number;
-}
-
 @Schema()
 export class File {
-  @Prop()
-  files: misFiles[];
-
   @Prop({ required: true })
   iduser: string;
 
   @Prop({ required: true })
-  names: string;
+  nameUnit: string;
 
   @Prop({ required: true })
-  contact: string;
+  profession: string;
 
   @Prop({ required: true })
-  maill: string;
+  webPage: string;
 
   @Prop({ required: true })
-  phoneNum: string;
+  name: string;
 
   @Prop({ required: true })
-  typeService: string;
+  email: string;
 
   @Prop({ required: true })
-  descripton: string;
+  description: string;
 
   @Prop({ required: true })
-  country: string;
+  phone: string;
+
+  @Prop()
+  files: string[];
 
   @Prop({ required: true })
-  city: string;
+  created_at: string;
 
-  created_at: Date
-  finished_at: Date
+  @Prop({ required: true })
+  finished_at: string;
 }
 
 export const FileSchema = SchemaFactory.createForClass(File);

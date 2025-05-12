@@ -12,6 +12,7 @@ import {
   UploadedFile,
   Param,
   Patch,
+  Query,
 } from '@nestjs/common';
 import { ActivitiesService } from './activities.service';
 import { CreateActivityDto } from './dto/create-activity.dto';
@@ -96,8 +97,8 @@ export class ActivitiesController {
   }
 
   @Get('allActivities')
-  findAllWithoutFilter() {
-    return this.activitiesService.findAll();
+  findAllWithoutFilter(@Query('nameUnit') nameUnit?: string) {
+    return this.activitiesService.findAll(nameUnit);
   }
 
   @Patch('update-activity/:id')

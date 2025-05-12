@@ -36,10 +36,12 @@ export class ActivitiesService {
   }
 
   async findAll(nameUnit?: string) {
-    const filter = nameUnit
-      ? { nameUnit: { $regex: new RegExp(nameUnit, 'i') } }
-      : {};
-    const list = await this.activityModule.find(filter);
+    const query: any = {};
+
+    if (nameUnit !== undefined) {
+      query.nameUnit = nameUnit;
+    }
+    const list = await this.activityModule.find(query).exec();
     return list;
   }
   findOne(id: number) {

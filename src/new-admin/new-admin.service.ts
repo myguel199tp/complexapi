@@ -34,12 +34,12 @@ export class NewAdminService {
   }
 
   async findAll(nameUnit?: string) {
-    const filter = nameUnit
-      ? { nameUnit: { $regex: new RegExp(nameUnit, 'i') } }
-      : {};
+    const query: any = {};
 
-    const list = await this.infoNewModule.find(filter).sort({ createdAt: -1 }); // -1 para descendente (más reciente primero)
-
+    if (nameUnit !== undefined) {
+      query.nameUnit = nameUnit;
+    }
+    const list = await this.infoNewModule.find(query).exec();
     return list;
   }
 

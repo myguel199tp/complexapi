@@ -28,7 +28,9 @@ export class SalesService {
   }
 
   async findAllByAllMethods(
+    ofert?: string,
     stratum?: string,
+    iduser?: string,
     room?: string,
     restroom?: string,
     age?: string,
@@ -41,8 +43,16 @@ export class SalesService {
   ) {
     const query: any = {};
 
+    if (ofert !== undefined) {
+      query.ofert = ofert;
+    }
+
     if (stratum !== undefined) {
       query.stratum = stratum;
+    }
+
+    if (iduser !== undefined) {
+      query.iduser = iduser;
     }
 
     if (room !== undefined) {
@@ -93,15 +103,15 @@ export class SalesService {
     return list;
   }
 
-  async findAllByUser(iduser?: string) {
+  async find(_id?: any) {
     const query: any = {};
 
-    if (iduser !== undefined) {
-      query.iduser = iduser;
+    if (_id !== undefined) {
+      query._id = _id;
     }
 
-    const list = await this.salesModule.find(query).exec();
-    return list;
+    const result = await this.salesModule.findOne(query).exec();
+    return result;
   }
 
   async findAllByProperty(property: string) {

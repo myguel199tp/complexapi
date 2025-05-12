@@ -1,6 +1,10 @@
 import { IsNotEmpty, IsString, IsBoolean, IsOptional } from 'class-validator';
 
 export class CreateHollidayDto {
+  @IsNotEmpty()
+  @IsString()
+  iduser: string;
+
   @IsOptional()
   @IsString()
   neigborhood?: string;
@@ -28,6 +32,10 @@ export class CreateHollidayDto {
   @IsNotEmpty()
   @IsString()
   maxGuests: number;
+
+  @IsNotEmpty()
+  @IsString()
+  property: string;
 
   @IsNotEmpty()
   @IsString()

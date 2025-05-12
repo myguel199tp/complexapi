@@ -1,4 +1,6 @@
+/* eslint-disable prettier/prettier */
 import { PartialType } from '@nestjs/swagger';
-import { CreateFileDto } from './create-file.dto';
+import { CreateCommerceDto } from './create-commerce.dto';
+// import { Type } from 'class-transformer';
 
-export class UpdateFileDto extends PartialType(CreateFileDto) {}
+export class UpdateFileDto extends PartialType(CreateCommerceDto) {}

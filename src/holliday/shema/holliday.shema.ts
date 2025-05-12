@@ -27,6 +27,9 @@ export class Holliday {
   maxGuests: number;
 
   @Prop({ required: true })
+  property: string;
+
+  @Prop({ required: true })
   parking: string;
 
   @Prop({ required: true })

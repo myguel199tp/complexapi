@@ -12,6 +12,7 @@ import {
   HttpCode,
   UploadedFile,
   UseGuards,
+  Query,
 } from '@nestjs/common';
 import { NewAdminService } from './new-admin.service';
 import { CreateNewAdminDto } from './dto/create-new-admin.dto';
@@ -97,8 +98,8 @@ export class NewAdminController {
   }
 
   @Get('allNews')
-  findAllWithoutFilter() {
-    return this.newAdminService.findAll();
+  findAllWithoutFilter(@Query('nameUnit') nameUnit?: string) {
+    return this.newAdminService.findAll(nameUnit);
   }
 
   @Get(':id')

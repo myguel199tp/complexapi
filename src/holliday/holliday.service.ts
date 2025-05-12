@@ -25,15 +25,27 @@ export class HollidayService {
     }
   }
 
-  async findAllByAllMethods(neigborhood?: string, city?: string) {
+  async findAllByAllMethods(
+    property?: string,
+    minPrice?: string,
+    maxPrice?: string,
+  ) {
     const query: any = {};
 
-    if (neigborhood !== undefined) {
-      query.neigborhood = neigborhood;
+    if (property !== undefined) {
+      query.property = property;
     }
 
-    if (city !== undefined) {
-      query.city = city;
+    if (minPrice !== undefined) {
+      query.price = { $gte: minPrice };
+    }
+
+    if (maxPrice !== undefined) {
+      if (query.price) {
+        query.price.$lte = maxPrice;
+      } else {
+        query.price = { $lte: maxPrice };
+      }
     }
 
     const list = await this.hollidayModel.find(query).exec();
