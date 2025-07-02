@@ -47,6 +47,9 @@ export class CreateUserDto {
   @IsString()
   nameUnit?: string;
 
+  @IsString()
+  nit?: string;
+
   @ApiProperty({ description: 'name unit' })
   @IsOptional()
   @IsString()

@@ -52,12 +52,15 @@ export class HollidayService {
     return list;
   }
 
-  async findAll(): Promise<Holliday[]> {
-    return this.hollidayModel.find().exec();
-  }
+  async findAllByUser(iduser?: string) {
+    const query: any = {};
 
-  async findOne(id: string): Promise<Holliday> {
-    return this.hollidayModel.findById(id).exec();
+    if (iduser !== undefined) {
+      query.iduser = iduser;
+    }
+
+    const list = await this.hollidayModel.find(query).exec();
+    return list;
   }
 
   async update(

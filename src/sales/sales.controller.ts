@@ -122,8 +122,13 @@ export class SalesController {
   }
 
   @Get('byuser')
-  findOne(@Query('_id') _id?: any) {
-    return this.salesService.find(_id);
+  findOne(@Query('iduser') iduser?: string) {
+    return this.salesService.findAllByUser(iduser);
+  }
+
+  @Get('inmovable')
+  find(@Query('_id') _id?: string) {
+    return this.salesService.findOneByImmovable(_id);
   }
 
   @Get('byProperty/:property')
@@ -136,8 +141,8 @@ export class SalesController {
     return this.salesService.findAllByOfert(ofert);
   }
 
-  @Put(':id')
-  update(@Param('id') _id: string, @Body() updateSaleDto: UpdateSaleDto) {
+  @Put(':_id')
+  update(@Param('_id') _id: string, @Body() updateSaleDto: UpdateSaleDto) {
     return this.salesService.update(_id, updateSaleDto);
   }
 

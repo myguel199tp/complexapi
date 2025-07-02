@@ -29,6 +29,9 @@ export class User {
   nameUnit?: string;
 
   @Prop()
+  nit?: string;
+
+  @Prop()
   address?: string;
 
   @Prop()

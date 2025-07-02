@@ -9,7 +9,11 @@ export class Activity {
   @Prop()
   status: boolean;
   @Prop()
+  cuantity: number;
+  @Prop()
   nameUnit: string;
+  @Prop()
+  nit?: string;
   @Prop()
   activity: string;
   @Prop()

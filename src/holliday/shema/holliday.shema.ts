@@ -6,6 +6,9 @@ export type HollidayDocument = Holliday & Document;
 @Schema()
 export class Holliday {
   @Prop({ required: true })
+  iduser: string;
+
+  @Prop({ required: true })
   neigborhood: string;
 
   @Prop({ required: true })

@@ -38,12 +38,15 @@ import { ChatModule } from './chat/chat.module';
 import { VisitModule } from './visit/visit.module';
 import { BookingModule } from './booking/booking.module';
 import { PropertyHolidayModule } from './property-holiday/property-holiday.module';
+import { PaymentsModule } from './payments/payments.module';
+import { RecordModule } from './record/record.module';
+import { ReservationActivityModule } from './reservation-activity/reservation-activity.module';
 
 @Module({
   imports: [
     MongooseModule.forRoot(process.env.MONGODB_URI),
     MulterModule.register({
-      dest: join(__dirname, '..', 'uploads'),
+      dest: join(__dirname, '..', 'uploads', 'pdfs'),
     }),
     LeasesModule,
     RentModule,
@@ -75,6 +78,9 @@ import { PropertyHolidayModule } from './property-holiday/property-holiday.modul
     VisitModule,
     BookingModule,
     PropertyHolidayModule,
+    PaymentsModule,
+    RecordModule,
+    ReservationActivityModule,
   ],
   controllers: [AppController],
   providers: [AppService],

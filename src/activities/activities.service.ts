@@ -35,12 +35,13 @@ export class ActivitiesService {
     return 'This action adds a new activity';
   }
 
-  async findAll(nameUnit?: string) {
+  async findAll(nit?: string) {
     const query: any = {};
 
-    if (nameUnit !== undefined) {
-      query.nameUnit = nameUnit;
+    if (nit !== undefined) {
+      query.nit = nit; // ✅ antes decías "bit", cámbialo por "nit"
     }
+
     const list = await this.activityModule.find(query).exec();
     return list;
   }

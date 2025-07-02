@@ -13,6 +13,7 @@ import {
   Param,
   Patch,
   Query,
+  Req,
 } from '@nestjs/common';
 import { ActivitiesService } from './activities.service';
 import { CreateActivityDto } from './dto/create-activity.dto';
@@ -30,7 +31,7 @@ export class ActivitiesController {
   constructor(private readonly activitiesService: ActivitiesService) {}
 
   @Post('register-activity')
-  @ApiOperation({ summary: 'Crear un nueva actividad' })
+  @ApiOperation({ summary: 'Crear una nueva actividad' })
   @HttpCode(HttpStatus.CREATED)
   @UseGuards(RolesGuard)
   @Roles('admins')
@@ -65,6 +66,7 @@ export class ActivitiesController {
   async register(
     @UploadedFile() file: Express.Multer.File,
     @Body() createActivityDto: CreateActivityDto,
+    @Req() req: any,
   ) {
     try {
       if (!file) {
@@ -74,22 +76,27 @@ export class ActivitiesController {
         );
       }
 
+      // Agregar la ruta del archivo subido
       createActivityDto.file = file.path;
-      const newAdmin = await this.activitiesService.registerActivity(
+
+      // Agregar el nit del conjunto desde el JWT
+      createActivityDto.nit = req.user.nit;
+
+      const newActivity = await this.activitiesService.registerActivity(
         createActivityDto,
       );
 
       return {
-        message: 'Noticia creada de forma exitosa',
-        user: newAdmin,
+        message: 'Actividad creada de forma exitosa',
+        activity: newActivity,
       };
     } catch (error) {
-      console.error('Error al registrar usuario:', error);
+      console.error('Error al registrar actividad:', error);
 
       throw new HttpException(
         {
           status: HttpStatus.BAD_REQUEST,
-          error: error || 'No se pudo crear la actividad',
+          error: 'No se pudo crear la actividad',
         },
         HttpStatus.BAD_REQUEST,
       );
@@ -97,8 +104,10 @@ export class ActivitiesController {
   }
 
   @Get('allActivities')
-  findAllWithoutFilter(@Query('nameUnit') nameUnit?: string) {
-    return this.activitiesService.findAll(nameUnit);
+  @Roles('admins')
+  async findAllActivities(@Req() req: any) {
+    const nit = req.user.nit; // ✅ lo tomas del JWT
+    return this.activitiesService.findAll(nit);
   }
 
   @Patch('update-activity/:id')

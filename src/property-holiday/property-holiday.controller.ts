@@ -1,12 +1,4 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Body,
-  Patch,
-  Param,
-  Delete,
-} from '@nestjs/common';
+import { Controller, Get, Post, Body } from '@nestjs/common';
 import { PropertyHolidayService } from './property-holiday.service';
 import { CreatePropertyHolidayDto } from './dto/create-property-holiday.dto';
 

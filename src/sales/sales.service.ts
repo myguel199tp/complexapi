@@ -3,7 +3,7 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { UpdateSaleDto } from './dto/update-sale.dto';
 import { InjectModel } from '@nestjs/mongoose';
 import { Sales, SalesDocument } from './shema/sales.shema';
-import { Model } from 'mongoose';
+import { Model, Types } from 'mongoose';
 import { CreateVenteDto } from './dto/create-vente.dto';
 
 @Injectable()
@@ -103,15 +103,25 @@ export class SalesService {
     return list;
   }
 
-  async find(_id?: any) {
+  async findAllByUser(iduser?: string) {
     const query: any = {};
 
-    if (_id !== undefined) {
-      query._id = _id;
+    if (iduser !== undefined) {
+      query.iduser = iduser;
     }
 
-    const result = await this.salesModule.findOne(query).exec();
-    return result;
+    const list = await this.salesModule.find(query).exec();
+    return list;
+  }
+
+  async findOneByImmovable(_id?: string) {
+    if (!_id || !Types.ObjectId.isValid(_id)) {
+      return null;
+    }
+    return this.salesModule
+      .findOne({ _id: new Types.ObjectId(_id) })
+      .lean() // opcional: para obtener un POJO en vez de un Document
+      .exec();
   }
 
   async findAllByProperty(property: string) {

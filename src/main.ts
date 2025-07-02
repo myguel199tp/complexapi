@@ -12,6 +12,10 @@ async function bootstrap() {
   dotenv.config();
   const app = await NestFactory.create(AppModule);
   app.use('/uploads', express.static(join(__dirname, '..', 'uploads')));
+  app.use(
+    '/uploads/pdfs',
+    express.static(join(__dirname, '..', 'uploads/pdfs')),
+  );
 
   app.use(bodyParser.json({ limit: '50mb' }));
   app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
@@ -48,6 +52,7 @@ async function bootstrap() {
     .addTag('users')
     .addTag('chart')
     .addTag('citofonies')
+    .addTag('certifications')
     .build();
 
   const document = SwaggerModule.createDocument(app, config);

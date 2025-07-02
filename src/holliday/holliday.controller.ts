@@ -73,16 +73,16 @@ export class HollidayController {
       );
 
       return {
-        message: 'Actividad registrada de forma exitosa',
+        message: 'Reserva registrada de forma exitosa',
         user: newActivity,
       };
     } catch (error) {
-      console.error('Error al registrar actividad:', error);
+      console.error('Error al registrar Reserva:', error);
 
       throw new HttpException(
         {
           status: HttpStatus.BAD_REQUEST,
-          error: error || 'No se pudo Registrar la actividad',
+          error: error || 'No se pudo Registrar la Reserva',
         },
         HttpStatus.BAD_REQUEST,
       );
@@ -100,5 +100,10 @@ export class HollidayController {
       minPrice,
       maxPrice,
     );
+  }
+
+  @Get('byuser')
+  findOne(@Query('iduser') iduser?: string) {
+    return this.hollidayService.findAllByUser(iduser);
   }
 }

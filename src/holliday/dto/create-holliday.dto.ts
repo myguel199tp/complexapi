@@ -27,7 +27,7 @@ export class CreateHollidayDto {
 
   @IsNotEmpty()
   @IsString()
-  price: string;
+  price: string;  
 
   @IsNotEmpty()
   @IsString()
