@@ -45,7 +45,7 @@ export class RegisterAuthDto extends PartialType(LoginAuthDto) {
   @IsString()
   nameUnit?: string;
 
-  @ApiProperty({ description: 'name unit' })
+  @ApiProperty({ description: 'nit unit' })
   @IsOptional()
   @IsString()
   nit?: string;
@@ -55,7 +55,7 @@ export class RegisterAuthDto extends PartialType(LoginAuthDto) {
   @IsString()
   file?: string;
 
-  @ApiProperty({ description: 'name unit' })
+  @ApiProperty({ description: 'direccion unit' })
   @IsOptional()
   @IsString()
   address?: string;

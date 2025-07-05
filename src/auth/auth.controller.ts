@@ -92,7 +92,6 @@ export class AuthController {
 
       if (existingUser) {
         if (registerAuthDto.nameUnit && registerAuthDto.apartment) {
-          // Si se envía una nueva contraseña, hashearla antes de actualizar
           if (registerAuthDto.password) {
             registerAuthDto.password = await hash(registerAuthDto.password, 10);
           }
@@ -113,6 +112,18 @@ export class AuthController {
           'El correo ya está registrado y no se proporcionaron datos adicionales para actualizar.',
           HttpStatus.BAD_REQUEST,
         );
+      }
+
+      if (registerAuthDto.nit) {
+        const countByNit = await this.authService.countUsersByNit(
+          registerAuthDto.nit,
+        );
+        if (countByNit >= 312) {
+          throw new HttpException(
+            'Limite de usuarios a registrar alcanzados',
+            HttpStatus.GONE,
+          );
+        }
       }
 
       registerAuthDto.file = file.path;

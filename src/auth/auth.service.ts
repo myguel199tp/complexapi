@@ -16,6 +16,10 @@ export class AuthService {
     private jwtService: JwtService,
   ) {}
 
+  async countUsersByNit(nit: string): Promise<number> {
+    return this.userModel.countDocuments({ nit }).exec();
+  }
+
   async findAll(nameUnit?: string) {
     const filter = nameUnit
       ? { nameUnit: { $regex: new RegExp(nameUnit, 'i') } }
